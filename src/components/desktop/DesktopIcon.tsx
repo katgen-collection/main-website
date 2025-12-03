@@ -22,7 +22,7 @@ export const DesktopIcon: React.FC<DesktopIconProps> = ({ label, icon: Icon, ini
         onDoubleClick={onDoubleClick}
       >
         <div className="w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-          <div className="w-14 h-14 bg-yellow-300 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center group-active:translate-x-0.5 group-active:translate-y-0.5 group-active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+          <div className="w-14 h-14 bg-purple-300 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center group-active:translate-x-0.5 group-active:translate-y-0.5 group-active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
             <Icon className="w-8 h-8 text-black" />
           </div>
         </div>

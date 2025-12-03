@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FolderGit2, User, Mail, Grid, FileText, LogOut, Wifi, Battery, Volume2, Search, Command, Music } from 'lucide-react';
+import { FolderGit2, User, Mail, Grid, LogOut, Wifi, Battery, Volume2, Search, Music } from 'lucide-react';
 import { LockScreen } from './LockScreen';
 import { DesktopIcon } from './DesktopIcon';
 import { Taskbar } from './Taskbar';
@@ -10,6 +10,8 @@ import { Window } from './Window';
 import { AboutApp } from './apps/AboutApp';
 import { ContactApp } from './apps/ContactApp';
 import { ProjectsApp } from './apps/ProjectsApp';
+import Image from 'next/image';
+import backgroundImage from '../../../public/assets/desktop-background.jpg';
 
 interface DesktopEnvironmentProps {
   onSwitchToLegacy: () => void;
@@ -50,16 +52,16 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
 
   return (
     <div className="fixed inset-0 bg-cover bg-center overflow-hidden font-mono" 
-         style={{ backgroundImage: "url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')" }}>
+         style={{ backgroundImage: `url(${backgroundImage.src})` }}>
       
       {/* Purple Overlay */}
       <div className="absolute inset-0 bg-purple-900/40 mix-blend-overlay pointer-events-none" />
       <div className="absolute inset-0 bg-black/10 pointer-events-none" />
 
       {/* Top Bar */}
-      <div className="absolute top-0 left-0 right-0 h-10 bg-white border-b-2 border-black flex items-center justify-between px-4 z-50 shadow-sm">
+      <div className="absolute top-0 left-0 right-0 h-10 bg-black border-b-2 border-black flex items-center justify-between px-4 z-50 shadow-sm">
         <div className="flex items-center gap-4">
-           <span className="font-p5 text-xl tracking-tightest text-black [word-spacing:0.5rem]">TAKE YOUR HEART</span>
+           <span className="font-p5 text-xl tracking-tightest text-white [word-spacing:0.5rem]">TAKE YOUR HEART</span>
         </div>
         <div className="flex items-center gap-6">
            <button 
@@ -75,7 +77,7 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
              <Volume2 className="w-4 h-4" />
              <Battery className="w-4 h-4" />
            </div>
-           <span className="font-p5 text-xl tracking-tighter text-black">{currentTime}</span>
+           <span className="font-p5 text-xl tracking-tighter text-white">{currentTime}</span>
         </div>
       </div>
 

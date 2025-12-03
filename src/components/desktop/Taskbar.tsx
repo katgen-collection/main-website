@@ -25,7 +25,7 @@ const TaskbarItem: React.FC<TaskbarItemProps> = ({ icon: Icon, label, onClick, i
       <div className={`absolute inset-0 border-2 border-black transition-all duration-200 ${
         isActive 
           ? 'bg-purple-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] translate-x-[2px] translate-y-[2px]' 
-          : 'bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] group-hover:translate-x-[3px] group-hover:translate-y-[3px] group-hover:bg-yellow-300'
+          : 'bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] group-hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] group-hover:translate-x-[3px] group-hover:translate-y-[3px] group-hover:bg-purple-300'
       }`}></div>
       
       <div className="relative z-10">

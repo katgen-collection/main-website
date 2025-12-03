@@ -1,5 +1,7 @@
 "use client";
 
+import backgroundImage from '../../../public/assets/desktop-background.jpg';
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { User, ArrowRight, Star } from 'lucide-react';
@@ -33,7 +35,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({ onUnlock }) => {
       }}
       className="fixed inset-0 z-100 flex flex-col items-center justify-center gap-24 py-20 text-white overflow-hidden"
       style={{
-        backgroundImage: "url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')",
+        backgroundImage: "url(" + backgroundImage.src + ")",
         backgroundSize: "cover",
         backgroundPosition: "center"
       }}
