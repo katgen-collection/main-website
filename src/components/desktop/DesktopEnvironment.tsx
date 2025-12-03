@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { FolderGit2, User, Mail, Grid, FileText, LogOut, Wifi, Battery, Volume2, Search, Command } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { FolderGit2, User, Mail, Grid, FileText, LogOut, Wifi, Battery, Volume2, Search, Command, Music } from 'lucide-react';
 import { LockScreen } from './LockScreen';
 import { DesktopIcon } from './DesktopIcon';
 import { Taskbar } from './Taskbar';
@@ -59,12 +59,16 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
       {/* Top Bar */}
       <div className="absolute top-0 left-0 right-0 h-10 bg-white border-b-2 border-black flex items-center justify-between px-4 z-50 shadow-sm">
         <div className="flex items-center gap-4">
-           <div className="p-1 bg-black text-white rounded-sm">
-             <Command className="w-4 h-4" />
-           </div>
-           <span className="font-p5 text-xl tracking-tightest text-black">SYSTEM</span>
+           <span className="font-p5 text-xl tracking-tightest text-black [word-spacing:0.5rem]">TAKE YOUR HEART</span>
         </div>
         <div className="flex items-center gap-6">
+           <button 
+             onClick={() => toggleWindow('spotify')}
+             className="hover:scale-110 transition-transform"
+             title="Spotify"
+           >
+             <Music className="w-4 h-4 text-green-600" />
+           </button>
            <Search className="w-4 h-4" />
            <div className="flex items-center gap-3">
              <Wifi className="w-4 h-4" />
@@ -80,7 +84,12 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
       </AnimatePresence>
 
       {!isLocked && (
-        <>
+        <motion.div 
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="absolute inset-0"
+        >
           {/* Desktop Icons Area */}
           <div className="absolute inset-0 pointer-events-none pt-10">
             <div className="pointer-events-auto w-full h-full relative">
@@ -110,7 +119,7 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
                   <DesktopIcon 
                     label="ME" 
                     icon={User} 
-                    initialPosition={{ x: 0, y: 100 }}
+                    initialPosition={{ x: 0, y: 130 }}
                     onDoubleClick={() => {
                       if (!openWindows.includes('about')) {
                         setOpenWindows(prev => [...prev, 'about']);
@@ -122,7 +131,7 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
                   <DesktopIcon 
                     label="Contact" 
                     icon={Mail} 
-                    initialPosition={{ x: 0, y: 200 }}
+                    initialPosition={{ x: 0, y: 260 }}
                     onDoubleClick={() => {
                       if (!openWindows.includes('contact')) {
                         setOpenWindows(prev => [...prev, 'contact']);
@@ -134,7 +143,7 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
                   <DesktopIcon 
                     label="Misc" 
                     icon={Grid} 
-                    initialPosition={{ x: 0, y: 300 }}
+                    initialPosition={{ x: 0, y: 390 }}
                     onDoubleClick={() => {
                       if (!openWindows.includes('misc')) {
                         setOpenWindows(prev => [...prev, 'misc']);
@@ -146,7 +155,7 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
                   <DesktopIcon 
                     label="WEB" 
                     icon={LogOut} 
-                    initialPosition={{ x: 0, y: 400 }}
+                    initialPosition={{ x: 0, y: 520 }}
                     onDoubleClick={onSwitchToLegacy}
                   />
                 </div>
@@ -201,13 +210,35 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
             </div>
           </Window>
 
+          <Window 
+            id="spotify" 
+            title="Spotify" 
+            isOpen={openWindows.includes('spotify')} 
+            isMinimized={minimizedWindows.includes('spotify')}
+            onClose={() => closeWindow('spotify')}
+            onMinimize={() => minimizeWindow('spotify')}
+          >
+            <div className="w-full h-full bg-black flex items-center justify-center">
+              <iframe 
+                style={{ borderRadius: '12px' }} 
+                src="https://open.spotify.com/embed/playlist/22zh0cByp4gBqH2RVPABXn?utm_source=generator"
+                width="100%" 
+                height="100%" 
+                frameBorder="0" 
+                allowFullScreen 
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy"
+              />
+            </div>
+          </Window>
+
           {/* Taskbar */}
           <Taskbar 
             onSwitchToLegacy={onSwitchToLegacy} 
             onOpenWindow={toggleWindow}
             openWindows={openWindows}
           />
-        </>
+        </motion.div>
       )}
     </div>
   );

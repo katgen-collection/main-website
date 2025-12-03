@@ -31,7 +31,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({ onUnlock }) => {
         clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
         transition: { duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] } 
       }}
-      className="fixed inset-0 z-100 flex flex-col items-center justify-between py-20 text-white overflow-hidden"
+      className="fixed inset-0 z-100 flex flex-col items-center justify-center gap-24 py-20 text-white overflow-hidden"
       style={{
         backgroundImage: "url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')",
         backgroundSize: "cover",
@@ -45,7 +45,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({ onUnlock }) => {
       {/* Diagonal Slice Decoration */}
       <div className="absolute top-0 right-0 w-2/3 h-full bg-black/40 -skew-x-12 translate-x-1/4 z-0 border-l-4 border-white/20" />
 
-      <div className="relative z-10 flex flex-col items-center mt-20">
+      <div className="relative z-10 flex flex-col items-center">
         <div className="bg-black px-8 py-4 transform -rotate-2 border-4 border-white shadow-[8px_8px_0px_0px_rgba(0,0,0,0.5)]">
           <h1 className="text-9xl font-p5 tracking-widest text-white drop-shadow-[4px_4px_0px_rgba(168,85,247,1)]">
             {time}
@@ -56,7 +56,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({ onUnlock }) => {
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-col items-center gap-8 mb-20">
+      <div className="relative z-10 flex flex-col items-center gap-8">
         <div className="flex flex-col items-center gap-4 group">
           <div className="relative">
             <div className="absolute inset-0 bg-black rounded-full transform translate-x-2 translate-y-2" />
@@ -68,7 +68,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({ onUnlock }) => {
             </div>
           </div>
           <div className="bg-white px-6 py-1 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] -rotate-1">
-            <h2 className="text-2xl font-p5 text-black tracking-wide">Mikhail Haritz</h2>
+            <h2 className="text-2xl font-p5 text-black tracking-[0.15em] [word-spacing:0.8rem]">Mikhail Haritz</h2>
           </div>
         </div>
         
@@ -77,7 +77,7 @@ export const LockScreen: React.FC<LockScreenProps> = ({ onUnlock }) => {
           className="group relative px-12 py-4 bg-red-600 hover:bg-red-500 transition-colors border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none"
         >
           <div className="flex items-center gap-3">
-            <span className="text-2xl font-p5 text-white tracking-widest uppercase">Take Your Heart</span>
+            <span className="text-2xl font-p5 text-white tracking-[0.15em] uppercase [word-spacing:0.5rem]">Take Your Heart</span>
             <ArrowRight className="w-6 h-6 text-white stroke-3 group-hover:translate-x-2 transition-transform" />
           </div>
           {/* Decorative corner */}
