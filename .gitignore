@@ -38,4 +38,8 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+# workspaces
+packages/*/node_modules
+packages/*/.pnp
+*.code-workspace
