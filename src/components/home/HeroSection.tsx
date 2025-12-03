@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { motion, useMotionValue, useSpring, AnimatePresence, MotionValue } from 'framer-motion';
+import { motion, useMotionValue, useSpring, AnimatePresence, MotionValue, Variants } from 'framer-motion';
 import { Download, ArrowDown, Code2, Sparkles, Zap, LucideIcon } from 'lucide-react';
 
 interface FloatingParticleProps {
@@ -135,7 +135,7 @@ const itemVariants = {
   }
 };
 
-const buttonVariants = {
+const buttonVariants: Variants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: {
     opacity: 1,
@@ -236,7 +236,7 @@ const Hero: React.FC = () => {
 
       <motion.section
         id="hero-section"
-        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-purple-900/20 to-black"
+        className="relative min-h-screen flex items-center justify-center overflow-hidden bg-linear-to-br from-gray-900 via-purple-900/20 to-black"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
@@ -309,7 +309,7 @@ const Hero: React.FC = () => {
                     Hi, I&apos;m
                   </motion.span>
                   <motion.span 
-                    className="block shimmer-text text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-purple-600"
+                    className="block shimmer-text text-transparent bg-clip-text bg-linear-to-r from-purple-400 via-pink-400 to-purple-600"
                     initial={{ x: 100, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
@@ -343,7 +343,7 @@ const Hero: React.FC = () => {
                   variants={buttonVariants}
                   whileHover="hover"
                   whileTap="tap"
-                  className="group relative px-12 py-4 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white font-semibold text-lg overflow-hidden shadow-lg"
+                  className="group relative px-12 py-4 bg-linear-to-r from-purple-500 to-pink-500 rounded-full text-white font-semibold text-lg overflow-hidden shadow-lg"
                 >
                   <motion.span 
                     className="relative z-10"
@@ -352,7 +352,7 @@ const Hero: React.FC = () => {
                     View My Work
                   </motion.span>
                   <motion.div 
-                    className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600"
+                    className="absolute inset-0 bg-linear-to-r from-purple-600 to-pink-600"
                     initial={{ opacity: 0 }}
                     whileHover={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
