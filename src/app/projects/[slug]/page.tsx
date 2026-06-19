@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { projects } from "@/types/projects"
 import { Metadata } from "next"
-import ProjectDetails from "@/components/projects/ProjectDetails"
+import ProjectDetailPage from "@/components/projects/ProjectDetailPage"
 
 interface ProjectPageProps {
   readonly params: Promise<{ slug: string }>
@@ -42,5 +42,5 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     notFound()
   }
 
-  return <ProjectDetails project={project} />
+  return <ProjectDetailPage project={project} />
 }

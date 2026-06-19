@@ -47,7 +47,7 @@ interface ProjectsListClientProps {
 
 export default function ProjectsListClient({ onProjectClick }: ProjectsListClientProps) {
   return (
-    <div className="min-h-screen bg-black/40 text-white relative overflow-hidden">
+    <div className="min-h-full bg-black/40 text-white relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(147,51,234,0.1),transparent_50%)] pointer-events-none" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -64,13 +64,13 @@ export default function ProjectsListClient({ onProjectClick }: ProjectsListClien
         }}
       />
 
-      <div className="container mx-auto px-4 py-12 relative z-10">
+      <div className="px-6 py-8 relative z-10">
         {/* Header Section */}
         <motion.div
           initial="hidden"
           animate="visible"
           variants={headerVariants}
-          className="flex items-center gap-6 mb-12"
+          className="flex items-center gap-4 mb-8"
         >
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
@@ -99,7 +99,7 @@ export default function ProjectsListClient({ onProjectClick }: ProjectsListClien
 
             <div>
               <motion.h1
-                className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent"
+                className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white via-purple-200 to-white bg-clip-text text-transparent"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
@@ -124,7 +124,7 @@ export default function ProjectsListClient({ onProjectClick }: ProjectsListClien
           initial="hidden"
           animate="visible"
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
         >
           {projects.map((project) => (
             <motion.div

@@ -9,7 +9,7 @@ export const ProjectsApp = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   return (
-    <div className="relative -m-6 h-full overflow-y-auto">
+    <div className="relative -m-6 h-full overflow-y-auto p5-scroll">
       {/* We use -m-6 to negate the padding from the Window component so the background fills the window */}
       <div className="transform scale-100 origin-top-left min-h-full">
         {selectedProject ? (

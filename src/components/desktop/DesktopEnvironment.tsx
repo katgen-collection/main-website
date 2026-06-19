@@ -10,18 +10,21 @@ import { Window } from './Window';
 import { AboutApp } from './apps/AboutApp';
 import { ContactApp } from './apps/ContactApp';
 import { ProjectsApp } from './apps/ProjectsApp';
-import Image from 'next/image';
-import backgroundImage from '../../../public/assets/desktop-background.jpg';
+import { DesktopBackground } from './DesktopBackground';
+import { AllOutAttack } from './AllOutAttack';
+import { BattleMenu } from './BattleMenu';
 
 interface DesktopEnvironmentProps {
   onSwitchToLegacy: () => void;
 }
 
 export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitchToLegacy }) => {
-  const [isLocked, setIsLocked] = useState(true);
+  // lock screen -> all-out-attack burst -> live desktop
+  const [phase, setPhase] = useState<'lock' | 'burst' | 'desk'>('lock');
   const [openWindows, setOpenWindows] = useState<string[]>([]);
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
   const [currentTime, setCurrentTime] = useState<string>('');
+  const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -50,47 +53,68 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
     setMinimizedWindows(prev => [...prev, id]);
   };
 
+  // Open (or restore) an app from the battle-command menu.
+  const openApp = (id: string) => {
+    setMenu(null);
+    if (id === 'web') {
+      onSwitchToLegacy();
+      return;
+    }
+    setOpenWindows(prev => (prev.includes(id) ? prev : [...prev, id]));
+    setMinimizedWindows(prev => prev.filter(w => w !== id));
+  };
+
+  // Right-clicking the bare desktop summons the P5 command menu; right-clicks
+  // inside a window keep their native behaviour.
+  const handleContextMenu = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('[data-window]')) return;
+    e.preventDefault();
+    const x = Math.min(e.clientX, window.innerWidth - 248);
+    const y = Math.min(e.clientY, window.innerHeight - 340);
+    setMenu({ x, y });
+  };
+
   return (
-    <div className="fixed inset-0 bg-cover bg-center overflow-hidden font-mono" 
-         style={{ backgroundImage: `url(${backgroundImage.src})` }}>
-      
-      {/* Purple Overlay */}
-      <div className="absolute inset-0 bg-purple-900/40 mix-blend-overlay pointer-events-none" />
-      <div className="absolute inset-0 bg-black/10 pointer-events-none" />
+    <div className="fixed inset-0 overflow-hidden font-mono">
+
+      {/* Layered, optimized wallpaper */}
+      <DesktopBackground intensity={22} />
 
       {/* Top Bar */}
-      <div className="absolute top-0 left-0 right-0 h-10 bg-black border-b-2 border-black flex items-center justify-between px-4 z-50 shadow-sm">
-        <div className="flex items-center gap-4">
-           <span className="font-p5 text-xl tracking-tightest text-white [word-spacing:0.5rem]">TAKE YOUR HEART</span>
+      <div className="absolute top-0 left-0 right-0 h-10 bg-black border-b-4 border-purple-500 flex items-center justify-between px-4 z-50 shadow-[0_4px_0_0_rgba(0,0,0,0.6)]">
+        <div className="flex items-center gap-3">
+           <span className="font-p5 text-xl tracking-tightest text-white [word-spacing:0.5rem] drop-shadow-[2px_2px_0_rgba(168,85,247,0.9)]">TAKE YOUR TIME</span>
         </div>
         <div className="flex items-center gap-6">
-           <button 
+           <button
              onClick={() => toggleWindow('spotify')}
              className="hover:scale-110 transition-transform"
              title="Spotify"
            >
              <Music className="w-4 h-4 text-green-600" />
            </button>
-           <Search className="w-4 h-4" />
-           <div className="flex items-center gap-3">
+           <Search className="w-4 h-4 text-white/80 hover:text-yellow-400 transition-colors cursor-pointer" />
+           <div className="flex items-center gap-3 text-white/80">
              <Wifi className="w-4 h-4" />
              <Volume2 className="w-4 h-4" />
              <Battery className="w-4 h-4" />
            </div>
-           <span className="font-p5 text-xl tracking-tighter text-white">{currentTime}</span>
+           <span className="font-p5 text-xl tracking-tighter text-white drop-shadow-[2px_2px_0_rgba(168,85,247,0.9)]">{currentTime}</span>
         </div>
       </div>
 
       <AnimatePresence>
-        {isLocked && <LockScreen onUnlock={() => setIsLocked(false)} />}
+        {phase === 'lock' && <LockScreen onUnlock={() => setPhase('burst')} />}
+        {phase === 'burst' && <AllOutAttack onComplete={() => setPhase('desk')} />}
       </AnimatePresence>
 
-      {!isLocked && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 1.05 }}
+      {phase === 'desk' && (
+        <motion.div
+          initial={{ opacity: 0, scale: 1.08 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           className="absolute inset-0"
+          onContextMenu={handleContextMenu}
         >
           {/* Desktop Icons Area */}
           <div className="absolute inset-0 pointer-events-none pt-10">
@@ -235,11 +259,21 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
           </Window>
 
           {/* Taskbar */}
-          <Taskbar 
-            onSwitchToLegacy={onSwitchToLegacy} 
+          <Taskbar
+            onSwitchToLegacy={onSwitchToLegacy}
             onOpenWindow={toggleWindow}
             openWindows={openWindows}
           />
+
+          {/* Right-click battle command menu */}
+          {menu && (
+            <BattleMenu
+              x={menu.x}
+              y={menu.y}
+              onClose={() => setMenu(null)}
+              onSelect={openApp}
+            />
+          )}
         </motion.div>
       )}
     </div>

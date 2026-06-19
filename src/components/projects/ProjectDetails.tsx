@@ -11,15 +11,15 @@ interface ProjectDetailsProps {
 
 export default function ProjectDetails({ project, onBack }: ProjectDetailsProps) {
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+    <div className="min-h-full bg-black/40 text-white relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-transparent to-pink-900/10" />
       <div className="absolute top-0 right-0 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-pink-500/5 rounded-full blur-3xl" />
 
-      <div className="container mx-auto px-4 py-12 relative z-10">
+      <div className="px-6 py-8 relative z-10">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-12">
+        <div className="flex items-center gap-4 mb-8">
           {onBack ? (
             <button
               onClick={onBack}
@@ -39,7 +39,7 @@ export default function ProjectDetails({ project, onBack }: ProjectDetailsProps)
           )}
           
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+            <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
               {project.title}
             </h1>
             <div className="flex items-center gap-4 text-sm text-gray-400">
@@ -59,9 +59,9 @@ export default function ProjectDetails({ project, onBack }: ProjectDetailsProps)
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-12">
+        <div className="grid lg:grid-cols-3 gap-6">
           {/* Main content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6">
             {/* Project image */}
             <div className="group relative w-full rounded-2xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-sm">
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -75,7 +75,7 @@ export default function ProjectDetails({ project, onBack }: ProjectDetailsProps)
             </div>
 
             {/* About section */}
-            <div className="space-y-6 bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl border border-white/10 p-8 backdrop-blur-sm">
+            <div className="space-y-6 bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl border border-white/10 p-5 backdrop-blur-sm">
               <div className="flex items-center gap-3">
                 <div className="w-1 h-8 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full" />
                 <h2 className="text-2xl font-bold">About this project</h2>
@@ -87,7 +87,7 @@ export default function ProjectDetails({ project, onBack }: ProjectDetailsProps)
             </div>
 
             {/* Technologies section */}
-            <div className="space-y-6 bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl border border-white/10 p-8 backdrop-blur-sm">
+            <div className="space-y-6 bg-gradient-to-br from-white/5 to-white/[0.02] rounded-2xl border border-white/10 p-5 backdrop-blur-sm">
               <div className="flex items-center gap-3">
                 <div className="w-1 h-8 bg-gradient-to-b from-purple-400 to-pink-400 rounded-full" />
                 <h2 className="text-2xl font-bold">Technologies Used</h2>

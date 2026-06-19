@@ -30,8 +30,16 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-    "Helvetica Neue", sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Reworked site type roles */
+.font-display {
+  font-family: var(--font-display), -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.font-code {
+  font-family: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 body {
@@ -49,4 +57,118 @@ html {
 
 .tracking-tightest {
   letter-spacing: -0.3em;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Persona 5 themed scrollbar (replaces the default white scrollbar)  */
+/* ------------------------------------------------------------------ */
+.p5-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #a855f7 #18181b;
+}
+
+.p5-scroll::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+.p5-scroll::-webkit-scrollbar-track {
+  background: #0d0d0f;
+  border-left: 2px solid #000;
+}
+
+.p5-scroll::-webkit-scrollbar-thumb {
+  background: #a855f7;
+  border: 3px solid #000;
+  background-image: linear-gradient(
+    -45deg,
+    #a855f7 0%,
+    #a855f7 45%,
+    #7e22ce 45%,
+    #7e22ce 55%,
+    #a855f7 55%,
+    #a855f7 100%
+  );
+  background-size: 8px 8px;
+}
+
+.p5-scroll::-webkit-scrollbar-thumb:hover {
+  background: #facc15;
+  background-image: linear-gradient(
+    -45deg,
+    #facc15 0%,
+    #facc15 45%,
+    #eab308 45%,
+    #eab308 55%,
+    #facc15 55%,
+    #facc15 100%
+  );
+  background-size: 8px 8px;
+}
+
+.p5-scroll::-webkit-scrollbar-corner {
+  background: #000;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Animations — layered, comic-book energy                            */
+/* ------------------------------------------------------------------ */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 9s linear infinite;
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-float-y {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+@keyframes halftone-drift {
+  from { background-position: 0 0; }
+  to { background-position: 80px 80px; }
+}
+.animate-halftone {
+  animation: halftone-drift 14s linear infinite;
+}
+
+@keyframes scanlines {
+  from { background-position: 0 0; }
+  to { background-position: 0 6px; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 5s ease-in-out infinite;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reusable depth helpers                                             */
+/* ------------------------------------------------------------------ */
+.p5-hard-shadow {
+  box-shadow: 8px 8px 0 0 rgba(0, 0, 0, 1);
+}
+.p5-hard-shadow-lg {
+  box-shadow: 14px 14px 0 0 rgba(0, 0, 0, 0.9), 0 0 0 0 transparent;
+}
+.text-stroke-black {
+  -webkit-text-stroke: 2px #000;
+  paint-order: stroke fill;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin-slow,
+  .animate-float-y,
+  .animate-halftone,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
 }

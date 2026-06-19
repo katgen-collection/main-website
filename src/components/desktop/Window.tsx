@@ -150,8 +150,16 @@ export const Window: React.FC<WindowProps> = ({
         </div>
       </div>
       
-      <div className="flex-1 overflow-auto bg-zinc-900 text-gray-100 relative p-6">
-        {children}
+      <div className="flex-1 overflow-auto p5-scroll bg-zinc-900 text-gray-100 relative p-6">
+        {/* subtle inner texture for depth */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.04]"
+          style={{
+            backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
+            backgroundSize: "16px 16px",
+          }}
+        />
+        <div className="relative z-10">{children}</div>
       </div>
 
       {!isMaximized && (
@@ -172,18 +180,18 @@ export const Window: React.FC<WindowProps> = ({
     <AnimatePresence>
       {(isOpen && !isMinimized) && (
         isMaximized ? (
-          <div style={windowStyle} className="fixed z-[60]">
+          <div data-window style={windowStyle} className="fixed z-[60]">
              {content}
           </div>
         ) : (
-          <Draggable 
-            handle=".window-header" 
-            bounds="parent" 
+          <Draggable
+            handle=".window-header"
+            bounds="parent"
             nodeRef={nodeRef}
             defaultPosition={position}
             onStop={handleDragStop}
           >
-            <div ref={nodeRef} style={{ ...windowStyle, position: 'absolute', zIndex: 40 }}>
+            <div data-window ref={nodeRef} style={{ ...windowStyle, position: 'absolute', zIndex: 40 }}>
               {content}
             </div>
           </Draggable>

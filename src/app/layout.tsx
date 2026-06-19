@@ -1,10 +1,15 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Plus_Jakarta_Sans } from "next/font/google"
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
 import localFont from "next/font/local";
 import "./globals.css"
 
-const plus_jakarta_sans = Plus_Jakarta_Sans({ subsets: ["latin"] })
+// Body — neutral, highly legible
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
+// Display — characterful grotesk for headlines
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-display" })
+// Mono — eyebrows, metadata, stack tags ("systems" voice)
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-code" })
 
 const p5_font = localFont({
   src: [
@@ -25,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${plus_jakarta_sans.className} ${p5_font.variable} bg-black text-white`}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${p5_font.variable} font-sans bg-black text-white`}>
           {children}
       </body>
     </html>

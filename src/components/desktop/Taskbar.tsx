@@ -1,8 +1,8 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { LucideIcon, Monitor, Grid, User, Mail, FolderOpen, LogOut } from 'lucide-react';
+import { LucideIcon, Grid, User, Mail, FolderOpen, LogOut } from 'lucide-react';
 
 interface TaskbarItemProps {
   icon: LucideIcon;
@@ -49,11 +49,50 @@ interface TaskbarProps {
 }
 
 export const Taskbar: React.FC<TaskbarProps> = ({ onSwitchToLegacy, onOpenWindow, openWindows }) => {
+  // Auto-hide dock: reveal when the cursor nears the bottom of the screen,
+  // tuck it away otherwise so it never obstructs window content.
+  const [revealed, setRevealed] = useState(true);
+  const [hovered, setHovered] = useState(false);
+
+  useEffect(() => {
+    // Hide shortly after mount so users see it, then it gets out of the way.
+    const initial = setTimeout(() => setRevealed(false), 2200);
+
+    const handleMove = (e: MouseEvent) => {
+      // Distance from the bottom edge of the viewport.
+      const fromBottom = window.innerHeight - e.clientY;
+      setRevealed(fromBottom <= 130);
+    };
+
+    window.addEventListener('mousemove', handleMove);
+    return () => {
+      clearTimeout(initial);
+      window.removeEventListener('mousemove', handleMove);
+    };
+  }, []);
+
+  const show = revealed || hovered;
+
   return (
-    <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] w-auto">
+    <>
+      {/* Invisible hit zone along the bottom edge to trigger the reveal */}
+      <div
+        className="fixed bottom-0 left-0 right-0 h-4 z-[99]"
+        onMouseEnter={() => setRevealed(true)}
+      />
+
+      <motion.div
+        className="fixed bottom-6 left-1/2 z-[100] w-auto"
+        initial={false}
+        animate={{ y: show ? 0 : 150, opacity: show ? 1 : 0.85 }}
+        transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+        style={{ x: '-50%' }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
       {/* Background container with skewed comic style */}
       <div className="relative px-8 py-4 bg-[#e0e0e0] border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] -skew-x-6 transform rotate-1">
-        
+
         {/* Inner content un-skewed */}
         <div className="flex items-center gap-6 skew-x-6">
           <TaskbarItem icon={Grid} label="All Apps" rotation={-3} />
@@ -84,14 +123,15 @@ export const Taskbar: React.FC<TaskbarProps> = ({ onSwitchToLegacy, onOpenWindow
           
           <div className="w-1 h-10 bg-black -rotate-6 mx-2" />
           
-          <TaskbarItem 
-            icon={LogOut} 
-            label="WEB" 
-            onClick={onSwitchToLegacy} 
+          <TaskbarItem
+            icon={LogOut}
+            label="WEB"
+            onClick={onSwitchToLegacy}
             rotation={-1}
           />
         </div>
       </div>
-    </div>
+      </motion.div>
+    </>
   );
 };

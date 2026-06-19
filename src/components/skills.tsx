@@ -1,11 +1,6 @@
 import type { ReactElement } from "react";
 
-import {
-  Code,
-  Server,
-  Database,
-  Settings
-} from "lucide-react";
+import { Server, Code, BrainCircuit, Cloud } from "lucide-react";
 
 export interface SkillCategory {
   title: string;
@@ -15,23 +10,23 @@ export interface SkillCategory {
 
 export const skillCategories: SkillCategory[] = [
   {
+    title: "Backend & Systems",
+    icon: <Server className="h-6 w-6 text-violet-400" />,
+    skills: ["Go", "Spring Boot", "Node.js / Express", "Python", "Microservices", "Event-Driven (Kafka, RabbitMQ)", "Redis"]
+  },
+  {
     title: "Frontend",
-    icon: <Code className="h-6 w-6 text-purple-400" />,
-    skills: ["React / Next.js / Vue.js", "TypeScript", "JavaScript", "Tailwind CSS", "HTML / CSS"]
+    icon: <Code className="h-6 w-6 text-violet-400" />,
+    skills: ["TypeScript", "Next.js", "React", "Tailwind CSS"]
   },
   {
-    title: "Backend",
-    icon: <Server className="h-6 w-6 text-purple-400" />,
-    skills: ["Node.js", "Express", "Spring Boot", "Django", "REST APIs"]
+    title: "AI Engineering",
+    icon: <BrainCircuit className="h-6 w-6 text-violet-400" />,
+    skills: ["LLM Integration", "Agentic Workflows & Tooling", "RAG & Retrieval", "Prompt Engineering & Evaluation", "NLP"]
   },
   {
-    title: "Database",
-    icon: <Database className="h-6 w-6 text-purple-400" />,
-    skills: ["MongoDB", "PostgreSQL", "NeonDB", "Supabase"]
-  },
-  {
-    title: "Tools",
-    icon: <Settings className="h-6 w-6 text-purple-400" />,
-    skills: ["Git / GitHub", "VS Code", "Figma", "Docker", "Vercel / Netlify"]
+    title: "Infrastructure",
+    icon: <Cloud className="h-6 w-6 text-violet-400" />,
+    skills: ["Docker", "Kubernetes", "CI/CD (GitHub Actions, GitLab)", "Linux", "PostgreSQL / MongoDB", "GCP"]
   }
 ];

@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import ProjectsListClient from "@/components/projects/ProjectsListClient"
+import ProjectsArchive from "@/components/projects/ProjectsArchive"
 
 export const metadata: Metadata = {
   title: "Projects | Portfolio",
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 }
 
 export default function ProjectsPage() {
-  return <ProjectsListClient />
+  return <ProjectsArchive />
 }
