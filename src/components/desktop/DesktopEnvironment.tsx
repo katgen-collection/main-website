@@ -13,6 +13,7 @@ import { ProjectsApp } from './apps/ProjectsApp';
 import { DesktopBackground } from './DesktopBackground';
 import { AllOutAttack } from './AllOutAttack';
 import { BattleMenu } from './BattleMenu';
+import { VelvetButterfly } from '../mobile/VelvetButterfly';
 
 interface DesktopEnvironmentProps {
   onSwitchToLegacy: () => void;
@@ -257,6 +258,9 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
               />
             </div>
           </Window>
+
+          {/* Velvet Room butterflies drifting over the desktop */}
+          <VelvetButterfly minCount={1} maxCount={3} minSize={34} maxSize={58} minDelay={7000} maxDelay={16000} zClass="z-30" />
 
           {/* Taskbar */}
           <Taskbar

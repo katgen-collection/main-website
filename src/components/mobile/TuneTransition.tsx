@@ -27,12 +27,12 @@ export function TuneTransition({ ch, label, onDone }: Props) {
       return;
     }
     sound.tune();
-    const t1 = setTimeout(() => setStep(1), 280);
+    const t1 = setTimeout(() => setStep(1), 380);
     const t2 = setTimeout(() => {
       setStep(2);
       sound.clunk();
-    }, 640);
-    const t3 = setTimeout(onDone, 860);
+    }, 1020);
+    const t3 = setTimeout(onDone, 1280);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
