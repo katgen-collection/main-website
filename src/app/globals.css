@@ -176,61 +176,55 @@ html {
 /* ------------------------------------------------------------------ */
 /*  Persona 4 "Midnight Channel" mobile OS                             */
 /* ------------------------------------------------------------------ */
-.font-p4-display { font-family: var(--font-p4-display), sans-serif; }
-.font-p4-tele { font-family: var(--font-p4-tele), monospace; }
-.font-p4-mono { font-family: var(--font-p4-mono), ui-monospace, monospace; }
+.font-p4-display { font-family: var(--font-p4-display), monospace; } /* Rubik Mono One */
+.font-p4-tele { font-family: var(--font-p4-tele), monospace; }      /* VT323 */
+.font-p4-label { font-family: var(--font-p4-label), sans-serif; }   /* DotGothic16 */
+.font-p4-mono { font-family: var(--font-p4-tele), monospace; }      /* back-compat alias */
 
-.p4-glow { text-shadow: 0 0 14px rgba(245, 197, 24, 0.45); }
+/* phosphor glows */
+.p4-glow { text-shadow: 0 0 10px rgba(245, 197, 24, 0.55), 0 0 22px rgba(245, 197, 24, 0.28); }
+.p4-glow-teal { text-shadow: 0 0 8px rgba(143, 214, 214, 0.55); }
+.p4-glow-green { text-shadow: 0 0 9px rgba(126, 224, 126, 0.6); }
+.p4-glow-red { text-shadow: 0 0 10px rgba(232, 90, 74, 0.6); }
 
+/* scanlines */
 @keyframes p4-scan { from { background-position: 0 0; } to { background-position: 0 6px; } }
 .p4-scanlines {
   background-image: repeating-linear-gradient(
-    rgba(0, 0, 0, 0) 0 2px,
-    rgba(0, 0, 0, 0.35) 3px,
-    rgba(0, 0, 0, 0.35) 4px
+    rgba(0, 0, 0, 0) 0 1px,
+    rgba(0, 0, 0, 0.4) 2px,
+    rgba(0, 0, 0, 0.4) 3px
   );
-  animation: p4-scan 1s linear infinite;
+  animation: p4-scan 1.1s linear infinite;
 }
 
-.p4-vignette {
-  background: radial-gradient(120% 100% at 50% 50%, transparent 58%, rgba(0, 0, 0, 0.6) 100%);
-}
+/* vignette, tube curvature, phosphor tint */
+.p4-vignette { background: radial-gradient(125% 100% at 50% 48%, transparent 50%, rgba(0, 0, 0, 0.75) 100%); }
+.p4-tube { box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.92), inset 0 0 22px rgba(126, 224, 126, 0.05); border-radius: inherit; }
+.p4-tint { background: linear-gradient(rgba(245, 197, 24, 0.05), rgba(126, 224, 126, 0.045)); }
 
-@keyframes p4-fog-drift {
-  0% { transform: translate3d(-4%, 0, 0); }
-  100% { transform: translate3d(4%, 2%, 0); }
+/* TV snow / static */
+@keyframes p4-snow {
+  0% { background-position: 0 0; }
+  20% { background-position: -55px 35px; }
+  40% { background-position: 45px -45px; }
+  60% { background-position: -35px -25px; }
+  80% { background-position: 35px 55px; }
+  100% { background-position: 0 0; }
 }
-.p4-fog {
-  background: radial-gradient(60% 50% at 50% 40%, rgba(245, 197, 24, 0.10), transparent 70%);
-  filter: blur(8px);
-  animation: p4-fog-drift 12s ease-in-out infinite alternate;
-}
-
-@keyframes p4-rain-fall { from { background-position: 0 0; } to { background-position: 0 220px; } }
-.p4-rain {
-  background-image: repeating-linear-gradient(
-    100deg,
-    rgba(143, 214, 214, 0) 0 9px,
-    rgba(143, 214, 214, 0.10) 9px 10px
-  );
-  animation: p4-rain-fall 0.7s linear infinite;
-  opacity: 0.5;
-}
-
-.p4-dashes {
-  background-image: repeating-linear-gradient(90deg, #f5c518 0 8px, transparent 8px 14px);
-  opacity: 0.7;
-}
-
-@keyframes p4-blink { 0%, 48% { opacity: 1; } 50%, 98% { opacity: 0.15; } 100% { opacity: 1; } }
-.p4-blink { animation: p4-blink 1.3s steps(1) infinite; }
-
-@keyframes p4-static-jitter { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+@keyframes p4-grainflick { 0%, 100% { opacity: 0.07; } 50% { opacity: 0.12; } }
 .p4-static {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: p4-static-jitter 0.2s steps(2) infinite;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  animation: p4-snow 0.5s steps(5) infinite;
+}
+.p4-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+  animation: p4-snow 0.55s steps(4) infinite, p4-grainflick 0.25s steps(2) infinite;
 }
 
+/* color bars + tracking band */
 .p4-colorbars {
   background: linear-gradient(
     90deg,
@@ -238,15 +232,44 @@ html {
     #00c900 0 57.1%, #c900c9 0 71.4%, #c90000 0 85.7%, #0000c9 0 100%
   );
 }
-
-@keyframes p4-track { 0% { top: -20%; } 100% { top: 120%; } }
+@keyframes p4-track { 0% { top: -25%; } 100% { top: 125%; } }
 .p4-tracking {
-  top: -20%;
-  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
-  animation: p4-track 2.2s linear infinite;
+  top: -25%;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
+  animation: p4-track 2.4s linear infinite;
 }
 
+/* drifting fog + rain */
+@keyframes p4-fog-drift { 0% { transform: translate3d(-5%, 0, 0); } 100% { transform: translate3d(5%, 3%, 0); } }
+.p4-fog {
+  background: radial-gradient(65% 55% at 50% 42%, rgba(245, 197, 24, 0.12), transparent 72%);
+  filter: blur(10px);
+  animation: p4-fog-drift 13s ease-in-out infinite alternate;
+}
+@keyframes p4-rain-fall { from { background-position: 0 0; } to { background-position: 0 220px; } }
+.p4-rain {
+  background-image: repeating-linear-gradient(
+    105deg,
+    rgba(143, 214, 214, 0) 0 9px,
+    rgba(143, 214, 214, 0.10) 9px 10px
+  );
+  animation: p4-rain-fall 0.65s linear infinite;
+  opacity: 0.45;
+}
+
+/* dashed broadcast divider */
+.p4-dashes {
+  background-image: repeating-linear-gradient(90deg, #f5c518 0 8px, transparent 8px 14px);
+  opacity: 0.7;
+}
+
+/* blink */
+@keyframes p4-blink { 0%, 48% { opacity: 1; } 50%, 98% { opacity: 0.12; } 100% { opacity: 1; } }
+.p4-blink { animation: p4-blink 1.3s steps(1) infinite; }
+.p4-blink-fast { animation: p4-blink 0.6s steps(1) infinite; }
+
 @media (prefers-reduced-motion: reduce) {
-  .p4-scanlines, .p4-fog, .p4-rain, .p4-blink, .p4-static, .p4-tracking { animation: none !important; }
-  .p4-rain { opacity: 0.2; }
+  .p4-scanlines, .p4-fog, .p4-rain, .p4-blink, .p4-blink-fast, .p4-static, .p4-grain, .p4-tracking { animation: none !important; }
+  .p4-rain { opacity: 0.18; }
+  .p4-grain { opacity: 0.07; }
 }

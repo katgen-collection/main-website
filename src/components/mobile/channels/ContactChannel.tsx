@@ -5,15 +5,16 @@ import { Github, Linkedin, Mail } from "lucide-react";
 import { ChannelShell } from "../TVOverlay";
 
 const LINKS = [
-  { Icon: Github, href: "https://github.com/MikhailJBS", label: "GitHub" },
-  { Icon: Linkedin, href: "https://www.linkedin.com/in/mikhailharitz77/", label: "LinkedIn" },
-  { Icon: Mail, href: "mailto:mikhailharitz@gmail.com", label: "Email" },
+  { Icon: Github, href: "https://github.com/MikhailJBS", label: "GITHUB" },
+  { Icon: Linkedin, href: "https://www.linkedin.com/in/mikhailharitz77/", label: "LINKEDIN" },
+  { Icon: Mail, href: "mailto:mikhailharitz@gmail.com", label: "EMAIL" },
 ];
 
 interface Props {
   onBack: () => void;
 }
 
+/** Contact rendered as a broadcast: a teletext mailto line and channel-style links. */
 export function ContactChannel({ onBack }: Props) {
   return (
     <motion.div
@@ -24,36 +25,33 @@ export function ContactChannel({ onBack }: Props) {
       transition={{ duration: 0.3 }}
     >
       <ChannelShell ch="03" label="CONTACT" onBack={onBack}>
-        <div className="px-4 py-5">
-          <h2 className="font-p4-display text-2xl tracking-wide text-[#1a1714]">OPEN A LINE</h2>
-          <p className="mt-2 font-p4-mono text-[12px] leading-relaxed text-[#3a3324]">
-            Have a project, a role, or just want to talk shop? Send a signal.
-          </p>
+        <p className="font-p4-tele text-[16px] leading-snug text-[#cdd2a0]">
+          Have a project, a role, or just want to talk shop? Send a signal.
+        </p>
 
-          <a
-            href="mailto:mikhailharitz@gmail.com"
-            className="mt-5 block rounded-xl border-2 border-[#1a1714] bg-[#1a1714] px-4 py-4 text-center font-p4-display text-base tracking-[0.12em] text-[#f5c518] shadow-[4px_4px_0_#e8352e] transition-transform active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_#e8352e]"
-          >
-            mikhailharitz@gmail.com
-          </a>
+        <a
+          href="mailto:mikhailharitz@gmail.com"
+          className="mt-4 flex items-center justify-center border-2 border-[#efe9cf] bg-[#0e0f08] px-4 py-4 active:border-[#f5c518]"
+        >
+          <span className="font-p4-tele text-lg tracking-wide text-[#f5c518] p4-glow">
+            ▶ mikhailharitz@gmail.com
+          </span>
+        </a>
 
-          <div className="mt-5 grid grid-cols-3 gap-3">
-            {LINKS.map(({ Icon, href, label }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="flex flex-col items-center gap-2 rounded-xl border-2 border-[#1a1714] bg-[#fffdf7] py-4 shadow-[3px_3px_0_#1a1714] transition-transform active:translate-x-[1px] active:translate-y-[1px]"
-              >
-                <Icon className="h-6 w-6 text-[#1a1714]" aria-hidden />
-                <span className="font-p4-mono text-[10px] font-bold uppercase tracking-wide text-[#1a1714]">
-                  {label}
-                </span>
-              </a>
-            ))}
-          </div>
+        <div className="mt-4 grid grid-cols-3 gap-3">
+          {LINKS.map(({ Icon, href, label }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="flex flex-col items-center gap-2 border-2 border-[#3a4226] bg-[#13150b] py-4 active:border-[#f5c518]"
+            >
+              <Icon className="h-6 w-6" color="#8fd6d6" aria-hidden />
+              <span className="font-p4-label text-[10px] tracking-wide text-[#cdd2a0]">{label}</span>
+            </a>
+          ))}
         </div>
       </ChannelShell>
     </motion.div>

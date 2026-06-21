@@ -1,25 +1,30 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { ArrowLeft } from "lucide-react";
 
 interface OverlayProps {
   children: ReactNode;
-  tone?: "dark" | "bright";
   fog?: boolean;
   rain?: boolean;
   className?: string;
 }
 
-export function TVOverlay({ children, tone = "dark", fog = false, rain = false, className = "" }: OverlayProps) {
-  const bg = tone === "dark" ? "bg-[#0d0b07]" : "bg-[#ffd400]";
+/**
+ * Shared CRT screen: a dark phosphor backdrop with grain, scanlines, a phosphor
+ * tint, vignette and tube curvature layered over its children. Optional drifting
+ * fog and rain sit behind the content.
+ */
+export function TVOverlay({ children, fog = false, rain = false, className = "" }: OverlayProps) {
   return (
-    <div className={`relative overflow-hidden ${bg} ${className}`}>
+    <div className={`relative overflow-hidden bg-[#0a0b06] ${className}`}>
       {fog && <div className="pointer-events-none absolute inset-0 z-0 p4-fog" aria-hidden />}
       {rain && <div className="pointer-events-none absolute inset-0 z-0 p4-rain" aria-hidden />}
       {children}
-      <div className="pointer-events-none absolute inset-0 z-20 p4-scanlines opacity-[0.10]" aria-hidden />
-      <div className="pointer-events-none absolute inset-0 z-20 p4-vignette" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-30 p4-grain" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-30 p4-tint" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-30 p4-scanlines opacity-50" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-30 p4-vignette" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-30 p4-tube" aria-hidden />
     </div>
   );
 }
@@ -31,27 +36,53 @@ interface ShellProps {
   children: ReactNode;
 }
 
+/**
+ * Dark broadcast frame for a channel: a REC bar, a NOW PLAYING title, a
+ * scrollable body, a red chyron lower-third, and the CRT texture stack.
+ */
 export function ChannelShell({ ch, label, onBack, children }: ShellProps) {
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[#ffd400] text-[#1a1714]">
-      <div className="absolute inset-x-0 top-0 z-30 flex items-center gap-3 bg-[#1a1714] px-4 py-3">
+    <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#0a0b06] text-[#efe9cf]">
+      {/* REC bar */}
+      <div className="relative z-20 flex items-center gap-3 px-4 pt-4 pb-1">
         <button
           onClick={onBack}
           aria-label="Back to channel guide"
-          className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#f5c518] text-[#1a1714]"
+          className="-ml-2 px-2 py-1 font-p4-tele text-lg leading-none text-[#8fd6d6] active:text-[#f5c518]"
         >
-          <ArrowLeft className="h-5 w-5" />
+          ◀ GUIDE
         </button>
-        <span className="font-p4-display text-lg tracking-[0.2em] text-[#f5c518]">{label}</span>
-        <span className="ml-auto font-p4-tele text-xl text-[#8fd6d6]">CH {ch}</span>
-        <span className="h-2.5 w-2.5 rounded-full bg-[#7ee07e] p4-blink" aria-hidden />
+        <span className="flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-[#c0392b] p4-blink" aria-hidden />
+          <span className="font-p4-tele text-sm leading-none text-[#b6a76f]">REC</span>
+        </span>
+        <span className="ml-auto font-p4-display text-xl leading-none text-[#f5c518] p4-glow">{ch}</span>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 top-[60px] overflow-y-auto overflow-x-hidden">
-        {children}
+      {/* title */}
+      <div className="relative z-20 px-4 pb-2">
+        <div className="font-p4-label text-[11px] tracking-[0.2em] text-[#8fd6d6]">▶ NOW PLAYING</div>
+        <div className="mt-1 font-p4-display text-3xl leading-none text-[#f5c518] p4-glow">{label}</div>
+        <div className="mt-2 h-0.5 w-full p4-dashes" aria-hidden />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-40 p4-scanlines opacity-[0.06]" aria-hidden />
+      {/* body */}
+      <div className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden px-4 py-3">{children}</div>
+
+      {/* chyron lower-third */}
+      <div className="relative z-20 shrink-0">
+        <div className="h-1 bg-[#c0392b]" />
+        <div className="flex items-center justify-between bg-[#0e0f08] px-4 py-2">
+          <span className="font-p4-tele text-base leading-none text-[#f5c518]">▶ NOW PLAYING · {label}</span>
+          <span className="font-p4-tele text-base leading-none text-[#8fd6d6]">CH {ch}</span>
+        </div>
+      </div>
+
+      {/* texture */}
+      <div className="pointer-events-none absolute inset-0 z-40 p4-grain" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-40 p4-scanlines opacity-50" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-40 p4-vignette" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 z-40 p4-tube" aria-hidden />
     </div>
   );
 }

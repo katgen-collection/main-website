@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Space_Grotesk, JetBrains_Mono, Archivo_Black, VT323, Space_Mono } from "next/font/google"
+import { Inter, Space_Grotesk, JetBrains_Mono, Rubik_Mono_One, VT323, DotGothic16 } from "next/font/google"
 import localFont from "next/font/local";
 import "./globals.css"
 
@@ -11,12 +11,12 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-displ
 // Mono — eyebrows, metadata, stack tags ("systems" voice)
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-code" })
 
-// P4 mobile OS - display (white-outlined headings, channel names, clock)
-const archivoBlack = Archivo_Black({ subsets: ["latin"], weight: "400", variable: "--font-p4-display" })
-// P4 mobile OS - teletext numerals and CRT readouts
+// P4 mobile OS - broadcast display headlines (channel names, NOW PLAYING)
+const rubikMonoOne = Rubik_Mono_One({ subsets: ["latin"], weight: "400", variable: "--font-p4-display" })
+// P4 mobile OS - teletext numerals, clock, body readouts
 const vt323 = VT323({ subsets: ["latin"], weight: "400", variable: "--font-p4-tele" })
-// P4 mobile OS - body and labels
-const spaceMono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-p4-mono" })
+// P4 mobile OS - pixel labels and channel tags
+const dotGothic = DotGothic16({ subsets: ["latin"], weight: "400", variable: "--font-p4-label" })
 
 const p5_font = localFont({
   src: [
@@ -37,7 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${p5_font.variable} ${archivoBlack.variable} ${vt323.variable} ${spaceMono.variable} font-sans bg-black text-white`}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${p5_font.variable} ${rubikMonoOne.variable} ${vt323.variable} ${dotGothic.variable} font-sans bg-black text-white`}>
           {children}
       </body>
     </html>

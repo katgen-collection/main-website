@@ -9,18 +9,23 @@ interface Props {
   onDone: () => void;
 }
 
+/**
+ * Signature tune-in: heavy snow + color bars + tracking band, a PLEASE STAND BY
+ * card, a tuning meter that fills, then a dissolve into the channel. Reduced
+ * motion cuts straight through.
+ */
 export function TuneTransition({ ch, label, onDone }: Props) {
   const reduce = useReducedMotion();
-  const [step, setStep] = useState(0); // 0 = static, 1 = tuning meter, 2 = dissolve
+  const [step, setStep] = useState(0); // 0 = no signal, 1 = tuning, 2 = dissolve
 
   useEffect(() => {
     if (reduce) {
       onDone();
       return;
     }
-    const t1 = setTimeout(() => setStep(1), 220);
-    const t2 = setTimeout(() => setStep(2), 600);
-    const t3 = setTimeout(onDone, 900);
+    const t1 = setTimeout(() => setStep(1), 320);
+    const t2 = setTimeout(() => setStep(2), 780);
+    const t3 = setTimeout(onDone, 1040);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -30,6 +35,8 @@ export function TuneTransition({ ch, label, onDone }: Props) {
 
   if (reduce) return null;
 
+  const lit = step >= 2 ? 8 : step >= 1 ? 6 : 2;
+
   return (
     <motion.div
       className="absolute inset-0 z-50 bg-[#0a0b06]"
@@ -37,29 +44,41 @@ export function TuneTransition({ ch, label, onDone }: Props) {
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className="pointer-events-none absolute inset-0 p4-static opacity-60" aria-hidden />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 p4-colorbars opacity-80" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 p4-static opacity-[0.55]" aria-hidden />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-16 p4-colorbars opacity-90" aria-hidden />
+      <div className="pointer-events-none absolute inset-x-0 top-16 h-4 bg-[#101208]" aria-hidden />
       <div className="pointer-events-none absolute inset-x-0 h-12 p4-tracking" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 p4-scanlines opacity-60" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 p4-vignette" aria-hidden />
+
+      <div className="absolute left-4 top-5 font-p4-tele text-lg text-[#efe9cf]">▶ PLAY</div>
 
       <motion.div
-        className="absolute inset-0 flex flex-col items-center justify-center text-center"
-        animate={step === 2 ? { scale: 1.15, opacity: 0 } : { scale: 1, opacity: 1 }}
-        transition={{ duration: 0.3 }}
+        className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center"
+        animate={step === 2 ? { scale: 1.12, opacity: 0 } : { scale: 1, opacity: 1 }}
+        transition={{ duration: 0.26 }}
       >
-        <div className="border-2 border-[#efe9cf] bg-[#0a0b06]/80 px-6 py-4">
-          <div className="font-p4-tele text-2xl tracking-[0.2em] text-[#e85a4a] p4-blink">
-            {step === 0 ? "NO SIGNAL" : "TUNING..."}
+        <div className="border-2 border-[#efe9cf] bg-[#0a0b06]/85 px-6 py-4 shadow-[0_0_28px_rgba(0,0,0,0.7)]">
+          <div className="font-p4-tele text-2xl tracking-[0.25em] text-[#e85a4a] p4-glow-red p4-blink-fast">
+            ⚠ NO SIGNAL
+          </div>
+          <div className="my-3 h-0.5 bg-[#efe9cf]/40" />
+          <div className="font-p4-display text-xl leading-tight text-[#efe9cf]">
+            PLEASE
+            <br />
+            STAND BY
           </div>
         </div>
-        <div className="mt-6 font-p4-tele text-xl tracking-[0.15em] text-[#f5c518]">
-          CH {ch} / {label}
+        <div className="mt-6 font-p4-tele text-xl tracking-[0.15em] text-[#f5c518] p4-glow">
+          ◀ TUNING ▶ CH {ch}
         </div>
-        <div className="mt-4 flex w-52 gap-1 border border-[#efe9cf] p-1">
+        <div className="mt-1 font-p4-label text-[12px] tracking-[0.2em] text-[#8fd6d6]">{label}</div>
+        <div className="mt-4 flex w-56 gap-1 border border-[#efe9cf] p-1">
           {Array.from({ length: 8 }).map((_, i) => (
             <span
               key={i}
-              className="h-2 flex-1"
-              style={{ background: step >= 1 && i < 6 ? "#f5c518" : "#4a4a30" }}
+              className="h-2.5 flex-1 transition-colors duration-200"
+              style={{ background: i < lit ? "#f5c518" : "#4a4a30" }}
             />
           ))}
         </div>
