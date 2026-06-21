@@ -51,7 +51,7 @@ export function TuneTransition({ ch, label, onDone }: Props) {
       onClick={onDone}
       {...crtMotion(reduce)}
     >
-      <div className="pointer-events-none absolute inset-0 p4-static opacity-[0.55]" aria-hidden />
+      <div className="pointer-events-none absolute inset-0 p4-static p4-snow-flicker" aria-hidden />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-16 p4-colorbars opacity-90" aria-hidden />
       <div className="pointer-events-none absolute inset-x-0 top-16 h-4 bg-[#101208]" aria-hidden />
       <div className="pointer-events-none absolute inset-x-0 h-12 p4-tracking" aria-hidden />
