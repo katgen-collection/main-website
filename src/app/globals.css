@@ -172,3 +172,81 @@ html {
     animation: none !important;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Persona 4 "Midnight Channel" mobile OS                             */
+/* ------------------------------------------------------------------ */
+.font-p4-display { font-family: var(--font-p4-display), sans-serif; }
+.font-p4-tele { font-family: var(--font-p4-tele), monospace; }
+.font-p4-mono { font-family: var(--font-p4-mono), ui-monospace, monospace; }
+
+.p4-glow { text-shadow: 0 0 14px rgba(245, 197, 24, 0.45); }
+
+@keyframes p4-scan { from { background-position: 0 0; } to { background-position: 0 6px; } }
+.p4-scanlines {
+  background-image: repeating-linear-gradient(
+    rgba(0, 0, 0, 0) 0 2px,
+    rgba(0, 0, 0, 0.35) 3px,
+    rgba(0, 0, 0, 0.35) 4px
+  );
+  animation: p4-scan 1s linear infinite;
+}
+
+.p4-vignette {
+  background: radial-gradient(120% 100% at 50% 50%, transparent 58%, rgba(0, 0, 0, 0.6) 100%);
+}
+
+@keyframes p4-fog-drift {
+  0% { transform: translate3d(-4%, 0, 0); }
+  100% { transform: translate3d(4%, 2%, 0); }
+}
+.p4-fog {
+  background: radial-gradient(60% 50% at 50% 40%, rgba(245, 197, 24, 0.10), transparent 70%);
+  filter: blur(8px);
+  animation: p4-fog-drift 12s ease-in-out infinite alternate;
+}
+
+@keyframes p4-rain-fall { from { background-position: 0 0; } to { background-position: 0 220px; } }
+.p4-rain {
+  background-image: repeating-linear-gradient(
+    100deg,
+    rgba(143, 214, 214, 0) 0 9px,
+    rgba(143, 214, 214, 0.10) 9px 10px
+  );
+  animation: p4-rain-fall 0.7s linear infinite;
+  opacity: 0.5;
+}
+
+.p4-dashes {
+  background-image: repeating-linear-gradient(90deg, #f5c518 0 8px, transparent 8px 14px);
+  opacity: 0.7;
+}
+
+@keyframes p4-blink { 0%, 48% { opacity: 1; } 50%, 98% { opacity: 0.15; } 100% { opacity: 1; } }
+.p4-blink { animation: p4-blink 1.3s steps(1) infinite; }
+
+@keyframes p4-static-jitter { 0% { background-position: 0 0; } 100% { background-position: 60px 60px; } }
+.p4-static {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: p4-static-jitter 0.2s steps(2) infinite;
+}
+
+.p4-colorbars {
+  background: linear-gradient(
+    90deg,
+    #c9c9c9 0 14.2%, #c9c900 0 28.5%, #00c9c9 0 42.8%,
+    #00c900 0 57.1%, #c900c9 0 71.4%, #c90000 0 85.7%, #0000c9 0 100%
+  );
+}
+
+@keyframes p4-track { 0% { top: -20%; } 100% { top: 120%; } }
+.p4-tracking {
+  top: -20%;
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+  animation: p4-track 2.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p4-scanlines, .p4-fog, .p4-rain, .p4-blink, .p4-static, .p4-tracking { animation: none !important; }
+  .p4-rain { opacity: 0.2; }
+}
