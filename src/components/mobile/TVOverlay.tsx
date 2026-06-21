@@ -43,8 +43,8 @@ interface ShellProps {
 export function ChannelShell({ ch, label, onBack, children }: ShellProps) {
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#0a0b06] text-[#efe9cf]">
-      {/* REC bar */}
-      <div className="relative z-20 flex items-center gap-3 px-4 pt-4 pb-1">
+      {/* REC bar (extra right padding clears the floating SFX toggle) */}
+      <div className="relative z-20 flex items-center gap-3 pl-4 pr-24 pt-4 pb-1">
         <button
           onClick={onBack}
           aria-label="Back to channel guide"

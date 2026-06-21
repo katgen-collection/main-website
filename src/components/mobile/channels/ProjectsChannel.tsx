@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChannelShell } from "../TVOverlay";
 import { projects } from "@/types/projects";
 
@@ -23,13 +23,15 @@ interface Props {
 
 /** Projects rendered as an electronic program guide (EPG) of broadcasts. */
 export function ProjectsChannel({ onBack }: Props) {
+  const reduce = useReducedMotion();
   return (
     <motion.div
       className="absolute inset-0"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      style={{ transformOrigin: "center" }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0.7, scaleY: 0.02 }}
+      animate={reduce ? { opacity: 1 } : { opacity: 1, scaleY: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
     >
       <ChannelShell ch="01" label="PROJECTS" onBack={onBack}>
         <div className="font-p4-tele text-[15px] text-[#a7ac80]">

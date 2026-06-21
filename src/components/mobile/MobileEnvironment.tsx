@@ -1,10 +1,12 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { LockScreen } from "./LockScreen";
 import { ChannelGuide } from "./ChannelGuide";
 import { TuneTransition } from "./TuneTransition";
+import { SoundToggle } from "./SoundToggle";
+import { sound } from "./sound";
 import { ProjectsChannel } from "./channels/ProjectsChannel";
 import { MeChannel } from "./channels/MeChannel";
 import { ContactChannel } from "./channels/ContactChannel";
@@ -19,7 +21,18 @@ export function MobileEnvironment({ onSwitchToWebsite }: Props) {
   const [active, setActive] = useState<ChannelId | null>(null);
   const [pending, setPending] = useState<{ ch: string; label: string }>({ ch: "", label: "" });
 
+  useEffect(() => {
+    sound.init();
+  }, []);
+
+  const enterGuide = useCallback(() => {
+    sound.enable();
+    sound.powerOn();
+    setPhase("guide");
+  }, []);
+
   const backToGuide = useCallback(() => {
+    sound.blip();
     setPhase("guide");
     setActive(null);
   }, []);
@@ -28,6 +41,7 @@ export function MobileEnvironment({ onSwitchToWebsite }: Props) {
     (id: ChannelId) => {
       const def = CHANNELS.find((c) => c.id === id);
       if (!def) return;
+      sound.blip();
       if (id === "resume") {
         window.open(RESUME_URL, "_blank", "noopener,noreferrer");
         return;
@@ -46,7 +60,7 @@ export function MobileEnvironment({ onSwitchToWebsite }: Props) {
   return (
     <div className="relative mx-auto h-[100dvh] w-full max-w-[480px] overflow-hidden bg-[#0d0b07] text-[#efe9cf]">
       <AnimatePresence mode="wait">
-        {phase === "lock" && <LockScreen key="lock" onEnter={() => setPhase("guide")} />}
+        {phase === "lock" && <LockScreen key="lock" onEnter={enterGuide} />}
         {phase === "guide" && <ChannelGuide key="guide" onSelect={selectChannel} />}
         {phase === "tuning" && (
           <TuneTransition
@@ -64,6 +78,11 @@ export function MobileEnvironment({ onSwitchToWebsite }: Props) {
           <ContactChannel key="contact" onBack={backToGuide} />
         )}
       </AnimatePresence>
+
+      {/* SFX toggle (muted by default) */}
+      <div className="absolute right-3 top-3 z-[60]">
+        <SoundToggle />
+      </div>
     </div>
   );
 }

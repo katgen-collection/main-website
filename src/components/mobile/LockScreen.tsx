@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { TVOverlay } from "./TVOverlay";
+import { Ticker } from "./Broadcast";
 
 function fmtTime(d: Date) {
   let h = d.getHours() % 12;
@@ -17,6 +18,8 @@ function fmtDate(d: Date) {
     .toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })
     .toUpperCase();
 }
+
+const FOOTER = "THE MIDNIGHT CHANNEL  //  FORECAST: FOG  //  RAIN AT MIDNIGHT  //  PRESS TO TUNE IN  //";
 
 interface Props {
   onEnter: () => void;
@@ -44,7 +47,11 @@ export function LockScreen({ onEnter }: Props) {
       transition={{ duration: 0.4 }}
     >
       <TVOverlay fog rain className="h-full w-full">
-        <div className="relative z-10 flex h-full flex-col items-center px-6 pt-12 pb-12 text-center">
+        {/* extra layered snow + a slow tracking sweep for a livelier signal */}
+        <div className="pointer-events-none absolute inset-0 z-0 p4-static opacity-[0.07]" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-0 z-0 h-20 p4-tracking" aria-hidden />
+
+        <div className="relative z-10 flex h-full flex-col items-center px-6 pt-12 pb-8 text-center">
           {/* status row */}
           <div className="flex w-full items-center justify-between">
             <span className="font-p4-tele text-base leading-none tracking-wide text-[#8fd6d6] p4-glow-teal p4-blink">
@@ -66,7 +73,7 @@ export function LockScreen({ onEnter }: Props) {
 
           {/* clock */}
           <div className="font-p4-tele text-xl tracking-[0.3em] text-[#8fd6d6] p4-glow-teal">{fmtDate(now)}</div>
-          <div className="font-p4-tele text-[112px] leading-[0.78] text-[#f5c518] p4-glow">{fmtTime(now)}</div>
+          <div className="font-p4-tele text-[112px] leading-[0.78] text-[#f5c518] p4-clock">{fmtTime(now)}</div>
           <div className="mt-1 font-p4-display text-base tracking-[0.2em] text-[#f5c518]">{ampm(now)}</div>
 
           <div className="mt-7 border-2 border-[#efe9cf] px-5 py-2">
@@ -85,6 +92,11 @@ export function LockScreen({ onEnter }: Props) {
               REACH OUT TO THE TRUTH
             </span>
           </button>
+
+          {/* scrolling teletext footer */}
+          <div className="mt-5 w-full border-t border-[#3a4226] pt-1">
+            <Ticker text={FOOTER} />
+          </div>
         </div>
       </TVOverlay>
     </motion.div>

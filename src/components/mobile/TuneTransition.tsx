@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { sound } from "./sound";
 
 interface Props {
   ch: string;
@@ -10,22 +11,27 @@ interface Props {
 }
 
 /**
- * Signature tune-in: heavy snow + color bars + tracking band, a PLEASE STAND BY
- * card, a tuning meter that fills, then a dissolve into the channel. Reduced
- * motion cuts straight through.
+ * Signature tune-in, reworked as a physical CRT channel-change: heavy snow +
+ * color bars + tracking band, a PLEASE STAND BY card, a tuning meter that fills,
+ * a bright horizontal sync flash, then the whole frame collapses to a scanline
+ * (the channel powers on from that line). Reduced motion cuts straight through.
  */
 export function TuneTransition({ ch, label, onDone }: Props) {
   const reduce = useReducedMotion();
-  const [step, setStep] = useState(0); // 0 = no signal, 1 = tuning, 2 = dissolve
+  const [step, setStep] = useState(0); // 0 = no signal, 1 = tuning, 2 = lock + flash
 
   useEffect(() => {
     if (reduce) {
       onDone();
       return;
     }
-    const t1 = setTimeout(() => setStep(1), 320);
-    const t2 = setTimeout(() => setStep(2), 780);
-    const t3 = setTimeout(onDone, 1040);
+    sound.tune();
+    const t1 = setTimeout(() => setStep(1), 300);
+    const t2 = setTimeout(() => {
+      setStep(2);
+      sound.clunk();
+    }, 720);
+    const t3 = setTimeout(onDone, 980);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -40,9 +46,11 @@ export function TuneTransition({ ch, label, onDone }: Props) {
   return (
     <motion.div
       className="absolute inset-0 z-50 bg-[#0a0b06]"
+      style={{ transformOrigin: "center" }}
       onClick={onDone}
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
+      initial={{ opacity: 1, scaleY: 1 }}
+      exit={{ scaleY: 0.004, opacity: 1 }}
+      transition={{ duration: 0.16, ease: "easeIn" }}
     >
       <div className="pointer-events-none absolute inset-0 p4-static opacity-[0.55]" aria-hidden />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-16 p4-colorbars opacity-90" aria-hidden />
@@ -53,13 +61,24 @@ export function TuneTransition({ ch, label, onDone }: Props) {
 
       <div className="absolute left-4 top-5 font-p4-tele text-lg text-[#efe9cf]">▶ PLAY</div>
 
+      {/* bright horizontal sync flash on lock */}
+      {step === 2 && (
+        <motion.div
+          className="pointer-events-none absolute inset-x-0 top-1/2 z-10 h-1 -translate-y-1/2 bg-white"
+          initial={{ opacity: 0, scaleX: 0.2 }}
+          animate={{ opacity: [0, 1, 0], scaleX: 1 }}
+          transition={{ duration: 0.32 }}
+          aria-hidden
+        />
+      )}
+
       <motion.div
         className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center"
-        animate={step === 2 ? { scale: 1.12, opacity: 0 } : { scale: 1, opacity: 1 }}
-        transition={{ duration: 0.26 }}
+        animate={step === 2 ? { scale: 1.08, opacity: 0 } : { scale: 1, opacity: 1 }}
+        transition={{ duration: 0.22 }}
       >
         <div className="border-2 border-[#efe9cf] bg-[#0a0b06]/85 px-6 py-4 shadow-[0_0_28px_rgba(0,0,0,0.7)]">
-          <div className="font-p4-tele text-2xl tracking-[0.25em] text-[#e85a4a] p4-glow-red p4-blink-fast">
+          <div className="font-p4-tele text-2xl tracking-[0.25em] text-[#e85a4a] p4-glow-red p4-chroma p4-blink-fast">
             ⚠ NO SIGNAL
           </div>
           <div className="my-3 h-0.5 bg-[#efe9cf]/40" />

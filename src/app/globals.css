@@ -268,8 +268,26 @@ html {
 .p4-blink { animation: p4-blink 1.3s steps(1) infinite; }
 .p4-blink-fast { animation: p4-blink 0.6s steps(1) infinite; }
 
+/* ticker / marquee */
+@keyframes p4-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.p4-marquee { display: inline-block; white-space: nowrap; animation: p4-marquee 22s linear infinite; }
+
+/* transmission waves (contact) */
+@keyframes p4-wave { 0% { transform: scale(0.35); opacity: 0.5; } 100% { transform: scale(1.7); opacity: 0; } }
+.p4-wave { animation: p4-wave 2.6s ease-out infinite; }
+
+/* signal-strength bars */
+@keyframes p4-bar { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+.p4-bar { transform-origin: bottom; animation: p4-bar 1s ease-in-out infinite; }
+
+/* chromatic aberration + clock + velvet glow */
+.p4-chroma { text-shadow: -1.5px 0 rgba(255, 40, 90, 0.5), 1.5px 0 rgba(0, 200, 255, 0.5); }
+.p4-clock { text-shadow: -1.5px 0 rgba(255, 40, 90, 0.4), 1.5px 0 rgba(0, 200, 255, 0.4), 0 0 16px rgba(245, 197, 24, 0.4); }
+.p4-glow-velvet { text-shadow: 0 0 8px rgba(123, 139, 255, 0.65); }
+
 @media (prefers-reduced-motion: reduce) {
-  .p4-scanlines, .p4-fog, .p4-rain, .p4-blink, .p4-blink-fast, .p4-static, .p4-grain, .p4-tracking { animation: none !important; }
+  .p4-scanlines, .p4-fog, .p4-rain, .p4-blink, .p4-blink-fast, .p4-static, .p4-grain, .p4-tracking,
+  .p4-marquee, .p4-wave, .p4-bar { animation: none !important; }
   .p4-rain { opacity: 0.18; }
   .p4-grain { opacity: 0.07; }
 }

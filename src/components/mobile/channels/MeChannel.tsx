@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ChannelShell } from "../TVOverlay";
+import { SignalBars } from "../Broadcast";
 import { skillCategories } from "@/components/skills";
 
 const FACTS = [
@@ -17,16 +18,23 @@ interface Props {
 
 /** Profile rendered as a broadcast: bio, fact rows, and a tagged stack. */
 export function MeChannel({ onBack }: Props) {
+  const reduce = useReducedMotion();
   return (
     <motion.div
       className="absolute inset-0"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      style={{ transformOrigin: "center" }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0.7, scaleY: 0.02 }}
+      animate={reduce ? { opacity: 1 } : { opacity: 1, scaleY: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
     >
       <ChannelShell ch="02" label="ME" onBack={onBack}>
-        <div className="space-y-3 font-p4-tele text-[16px] leading-snug text-[#cdd2a0]">
+        <div className="flex items-center gap-2 font-p4-label text-[10px] uppercase tracking-[0.18em] text-[#6b7148]">
+          VIEWER PROFILE
+          <SignalBars className="h-4" />
+        </div>
+
+        <div className="mt-3 space-y-3 font-p4-tele text-[16px] leading-snug text-[#cdd2a0]">
           <p>
             I am a software engineer focused on building scalable backend systems, mostly in Go,
             Spring, and TypeScript. I work full-stack, with Next.js on the frontend and Python
