@@ -5,6 +5,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import { TVOverlay } from "./TVOverlay";
 import { ChannelIcon } from "./ChannelIcon";
 import { OnAir, SignalBars, Ticker, WeatherChip } from "./Broadcast";
+import { VelvetButterfly } from "./VelvetButterfly";
+import { crtMotion } from "./crtMotion";
 import { CHANNELS, type ChannelId } from "./mobileData";
 
 function fmtTime(d: Date) {
@@ -33,14 +35,7 @@ export function ChannelGuide({ onSelect }: Props) {
   }, []);
 
   return (
-    <motion.div
-      className="absolute inset-0"
-      style={{ transformOrigin: "center" }}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, scaleY: 0.02 }}
-      animate={reduce ? { opacity: 1 } : { opacity: 1, scaleY: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <motion.div className="absolute inset-0" style={{ transformOrigin: "center" }} {...crtMotion(reduce)}>
       <TVOverlay fog className="h-full w-full">
         {/* oversized faded wordmark backdrop */}
         <div
@@ -89,7 +84,7 @@ export function ChannelGuide({ onSelect }: Props) {
 
           {/* channel grid */}
           <div className="mt-5 flex-1 overflow-y-auto overflow-x-hidden">
-            <div className="grid grid-cols-2 gap-x-4 gap-y-7 pt-2">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-7 px-1 pt-5">
               {CHANNELS.map((c, i) => (
                 <ChannelIcon key={c.id} channel={c} highlight={i === 0} onSelect={onSelect} />
               ))}
@@ -101,6 +96,8 @@ export function ChannelGuide({ onSelect }: Props) {
             <WeatherChip />
             <span className="font-p4-tele text-base text-[#7ee07e] p4-glow-green">▶ ENTER</span>
           </div>
+
+          <VelvetButterfly />
         </div>
       </TVOverlay>
     </motion.div>

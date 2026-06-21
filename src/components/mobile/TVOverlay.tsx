@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { motion } from "framer-motion";
 
 interface OverlayProps {
   children: ReactNode;
@@ -77,6 +78,15 @@ export function ChannelShell({ ch, label, onBack, children }: ShellProps) {
           <span className="font-p4-tele text-base leading-none text-[#8fd6d6]">CH {ch}</span>
         </div>
       </div>
+
+      {/* CRT turn-on flash */}
+      <motion.div
+        className="pointer-events-none absolute inset-x-0 top-1/2 z-40 h-0.5 -translate-y-1/2 bg-white"
+        initial={{ opacity: 0.9, scaleX: 0.2 }}
+        animate={{ opacity: 0, scaleX: 1 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+        aria-hidden
+      />
 
       {/* texture */}
       <div className="pointer-events-none absolute inset-0 z-40 p4-grain" aria-hidden />

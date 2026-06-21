@@ -113,27 +113,52 @@ class Sound {
     o.stop(now + dur + 0.02);
   }
 
+  private noiseSweep(dur: number, gain: number, fromFreq: number, toFreq: number) {
+    const ctx = this.ensure();
+    if (!ctx || !this.master || !this.noiseBuffer || this.muted) return;
+    const src = ctx.createBufferSource();
+    src.buffer = this.noiseBuffer;
+    src.loop = true;
+    const f = ctx.createBiquadFilter();
+    f.type = "bandpass";
+    f.Q.value = 0.7;
+    const now = ctx.currentTime;
+    f.frequency.setValueAtTime(fromFreq, now);
+    f.frequency.exponentialRampToValueAtTime(toFreq, now + dur);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.linearRampToValueAtTime(gain, now + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    src.connect(f);
+    f.connect(g);
+    g.connect(this.master);
+    src.start(now);
+    src.stop(now + dur + 0.05);
+  }
+
   /** Short UI blip for taps. */
   blip() {
-    this.tone(660, 0.07, 0.16, "square");
+    this.tone(620, 0.06, 0.13, "square");
   }
 
-  /** Channel locks in: a low clunk plus a click. */
+  /** Channel locks in: a thunk, a tick, and a short low burst. */
   clunk() {
-    this.tone(130, 0.18, 0.28, "sawtooth", 60);
-    this.noise(0.08, 0.1, { type: "lowpass", freq: 900 });
+    this.tone(95, 0.18, 0.32, "square", 42);
+    this.tone(1600, 0.05, 0.07, "square");
+    this.noise(0.06, 0.1, { type: "lowpass", freq: 800 });
   }
 
-  /** Power-on thunk when leaving the lock screen. */
+  /** Degauss-style power thunk when the tube energizes. */
   powerOn() {
-    this.tone(80, 0.28, 0.24, "sine", 340);
-    this.noise(0.16, 0.07, { type: "highpass", freq: 600 });
+    this.tone(55, 0.3, 0.3, "sine", 180);
+    this.tone(2200, 0.28, 0.05, "sine", 380);
+    this.noise(0.1, 0.08, { type: "highpass", freq: 1200 });
   }
 
-  /** Tuning hiss + whine during the channel-change transition. */
+  /** Channel-change: sweeping static plus a descending flyback whine. */
   tune() {
-    this.noise(0.75, 0.16, { type: "bandpass", freq: 1800 });
-    this.tone(900, 0.6, 0.05, "sine", 480);
+    this.noiseSweep(0.7, 0.18, 700, 2600);
+    this.tone(1300, 0.7, 0.05, "sawtooth", 280);
   }
 }
 

@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { TVOverlay } from "./TVOverlay";
 import { Ticker } from "./Broadcast";
+import { crtMotion } from "./crtMotion";
 
 function fmtTime(d: Date) {
   let h = d.getHours() % 12;
@@ -27,6 +28,7 @@ interface Props {
 
 /** Standby / clock set: glowing teletext clock, test-card corner, blinking tune-in prompt. */
 export function LockScreen({ onEnter }: Props) {
+  const reduce = useReducedMotion();
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
@@ -39,13 +41,7 @@ export function LockScreen({ onEnter }: Props) {
   }, []);
 
   return (
-    <motion.div
-      className="absolute inset-0"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-    >
+    <motion.div className="absolute inset-0" style={{ transformOrigin: "center" }} {...crtMotion(reduce)}>
       <TVOverlay fog rain className="h-full w-full">
         {/* extra layered snow + a slow tracking sweep for a livelier signal */}
         <div className="pointer-events-none absolute inset-0 z-0 p4-static opacity-[0.07]" aria-hidden />

@@ -285,9 +285,13 @@ html {
 .p4-clock { text-shadow: -1.5px 0 rgba(255, 40, 90, 0.4), 1.5px 0 rgba(0, 200, 255, 0.4), 0 0 16px rgba(245, 197, 24, 0.4); }
 .p4-glow-velvet { text-shadow: 0 0 8px rgba(123, 139, 255, 0.65); }
 
+/* butterfly wing flap */
+@keyframes p4-flap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(0.4); } }
+.p4-flap { transform-origin: center; animation: p4-flap 0.2s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   .p4-scanlines, .p4-fog, .p4-rain, .p4-blink, .p4-blink-fast, .p4-static, .p4-grain, .p4-tracking,
-  .p4-marquee, .p4-wave, .p4-bar { animation: none !important; }
+  .p4-marquee, .p4-wave, .p4-bar, .p4-flap { animation: none !important; }
   .p4-rain { opacity: 0.18; }
   .p4-grain { opacity: 0.07; }
 }

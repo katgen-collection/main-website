@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ChannelShell } from "../TVOverlay";
+import { crtMotion } from "../crtMotion";
 import { projects } from "@/types/projects";
 
 const ordered = [...projects].sort(
@@ -25,14 +26,7 @@ interface Props {
 export function ProjectsChannel({ onBack }: Props) {
   const reduce = useReducedMotion();
   return (
-    <motion.div
-      className="absolute inset-0"
-      style={{ transformOrigin: "center" }}
-      initial={reduce ? { opacity: 0 } : { opacity: 0.7, scaleY: 0.02 }}
-      animate={reduce ? { opacity: 1 } : { opacity: 1, scaleY: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <motion.div className="absolute inset-0" style={{ transformOrigin: "center" }} {...crtMotion(reduce)}>
       <ChannelShell ch="01" label="PROJECTS" onBack={onBack}>
         <div className="font-p4-tele text-[15px] text-[#a7ac80]">
           TODAY&apos;S PROGRAM GUIDE · {ordered.length} LISTINGS

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { sound } from "./sound";
+import { crtMotion } from "./crtMotion";
 
 interface Props {
   ch: string;
@@ -26,12 +27,12 @@ export function TuneTransition({ ch, label, onDone }: Props) {
       return;
     }
     sound.tune();
-    const t1 = setTimeout(() => setStep(1), 300);
+    const t1 = setTimeout(() => setStep(1), 280);
     const t2 = setTimeout(() => {
       setStep(2);
       sound.clunk();
-    }, 720);
-    const t3 = setTimeout(onDone, 980);
+    }, 640);
+    const t3 = setTimeout(onDone, 860);
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
@@ -48,9 +49,7 @@ export function TuneTransition({ ch, label, onDone }: Props) {
       className="absolute inset-0 z-50 bg-[#0a0b06]"
       style={{ transformOrigin: "center" }}
       onClick={onDone}
-      initial={{ opacity: 1, scaleY: 1 }}
-      exit={{ scaleY: 0.004, opacity: 1 }}
-      transition={{ duration: 0.16, ease: "easeIn" }}
+      {...crtMotion(reduce)}
     >
       <div className="pointer-events-none absolute inset-0 p4-static opacity-[0.55]" aria-hidden />
       <div className="pointer-events-none absolute inset-x-0 top-0 h-16 p4-colorbars opacity-90" aria-hidden />
