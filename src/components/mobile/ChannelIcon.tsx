@@ -21,7 +21,7 @@ export function ChannelIcon({ channel, onSelect }: Props) {
   return (
     <button
       onClick={() => onSelect(channel.id)}
-      className="group relative flex flex-col items-start gap-2 rounded-lg border-2 border-[#3a4226] bg-[#13150b] p-4 text-left transition-colors active:border-[#f5c518]"
+      className="relative flex flex-col items-start gap-2 rounded-lg border-2 border-[#3a4226] bg-[#13150b] p-4 text-left transition-colors active:border-[#f5c518]"
     >
       <span className="absolute -top-3 left-3 bg-[#f5c518] px-2 font-p4-tele text-base leading-none text-[#181a0e]">
         CH {channel.ch}

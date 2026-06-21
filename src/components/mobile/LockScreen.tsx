@@ -23,8 +23,13 @@ interface Props {
 export function LockScreen({ onEnter }: Props) {
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
+    let timer: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      setNow(new Date());
+      timer = setTimeout(tick, 60000 - (Date.now() % 60000));
+    };
+    timer = setTimeout(tick, 60000 - (Date.now() % 60000));
+    return () => clearTimeout(timer);
   }, []);
 
   return (
