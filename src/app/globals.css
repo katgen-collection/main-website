@@ -285,13 +285,21 @@ html {
 .p4-clock { text-shadow: -1.5px 0 rgba(255, 40, 90, 0.4), 1.5px 0 rgba(0, 200, 255, 0.4), 0 0 16px rgba(245, 197, 24, 0.4); }
 .p4-glow-velvet { text-shadow: 0 0 8px rgba(123, 139, 255, 0.65); }
 
-/* butterfly wing flap */
+/* butterfly wing flap (legacy 2D) */
 @keyframes p4-flap { 0%, 100% { transform: scaleX(1); } 50% { transform: scaleX(0.4); } }
 .p4-flap { transform-origin: center; animation: p4-flap 0.2s ease-in-out infinite; }
 
+/* butterfly wings flapping in 3D */
+.bf-scene { transform-style: preserve-3d; }
+.bf-wing { position: absolute; top: 0; height: 100%; width: 50%; }
+.bf-wing-l { left: 0; transform-origin: right center; animation: bf-flap-l 0.24s ease-in-out infinite; }
+.bf-wing-r { left: 50%; transform-origin: left center; animation: bf-flap-r 0.24s ease-in-out infinite; }
+@keyframes bf-flap-l { 0%, 100% { transform: rotateY(18deg); } 50% { transform: rotateY(82deg); } }
+@keyframes bf-flap-r { 0%, 100% { transform: rotateY(-18deg); } 50% { transform: rotateY(-82deg); } }
+
 @media (prefers-reduced-motion: reduce) {
   .p4-scanlines, .p4-fog, .p4-rain, .p4-blink, .p4-blink-fast, .p4-static, .p4-grain, .p4-tracking,
-  .p4-marquee, .p4-wave, .p4-bar, .p4-flap { animation: none !important; }
+  .p4-marquee, .p4-wave, .p4-bar, .p4-flap, .bf-wing-l, .bf-wing-r { animation: none !important; }
   .p4-rain { opacity: 0.18; }
   .p4-grain { opacity: 0.07; }
 }

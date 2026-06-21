@@ -12,6 +12,15 @@ function rnd(seed: number) {
   return x - Math.floor(x);
 }
 
+// One butterfly's wing (mirrored for the other side). Inner edge sits at the
+// body axis so it can hinge there in 3D.
+const WING = (
+  <g stroke="#0284c7" strokeWidth="0.7" strokeLinejoin="round">
+    <path d="M0 12 L17 5 Q19.5 11 14 16 L1 17 Z" fill="#7dd3fc" />
+    <path d="M1 18 L13 27 Q10.5 34 5 31 L0 22 Z" fill="#38bdf8" />
+  </g>
+);
+
 function Butterfly({
   seed,
   minSize,
@@ -29,6 +38,16 @@ function Butterfly({
   const delay = rnd(seed * 19 + 4) * 1.6; // stagger
   const size = minSize + rnd(seed * 23 + 5) * (maxSize - minSize);
 
+  // Varied 3D pose, banked toward the direction of travel.
+  const yaw = rnd(seed * 31 + 6) * 70 - 35; // -35..35
+  const pitch = rnd(seed * 37 + 7) * 22 - 8; // -8..14
+  const bankMag = 8 + rnd(seed * 41 + 8) * 14; // 8..22
+  const bank = fromLeft ? bankMag : -bankMag;
+  const flapDur = 0.18 + rnd(seed * 43 + 9) * 0.12; // 0.18..0.30
+
+  const H = Math.round(size * 0.85);
+  const bodyW = Math.max(3, Math.round((H * 6) / 34));
+
   return (
     <motion.div
       className={`pointer-events-none absolute ${zClass}`}
@@ -41,29 +60,57 @@ function Butterfly({
       }}
       transition={{ duration, delay, ease: "easeInOut" }}
     >
-      <svg
-        width={size}
-        height={Math.round(size * 0.85)}
-        viewBox="0 0 40 34"
-        className="p4-flap"
-        style={{ filter: `drop-shadow(0 0 6px ${GLOW})`, transform: fromLeft ? "none" : "scaleX(-1)" }}
-        aria-hidden
-      >
-        <g stroke="#0284c7" strokeWidth="0.7" strokeLinejoin="round">
-          <path d="M20 12 L37 5 Q39.5 11 34 16 L21 17 Z" fill="#7dd3fc" />
-          <path d="M20 12 L3 5 Q0.5 11 6 16 L19 17 Z" fill="#7dd3fc" />
-          <path d="M21 18 L33 27 Q30.5 34 25 31 L20 22 Z" fill="#38bdf8" />
-          <path d="M19 18 L7 27 Q9.5 34 15 31 L20 22 Z" fill="#38bdf8" />
-        </g>
-        <ellipse cx="20" cy="18" rx="1.4" ry="8" fill="#1e3a8a" />
-        <circle cx="20" cy="9.5" r="1.8" fill="#1e3a8a" />
-        <g stroke="#1e3a8a" strokeWidth="0.9" fill="none" strokeLinecap="round">
-          <path d="M20 9 C18 4 17 3 15.6 1.8" />
-          <path d="M20 9 C22 4 23 3 24.4 1.8" />
-        </g>
-        <circle cx="15.4" cy="1.6" r="0.9" fill="#1e3a8a" />
-        <circle cx="24.6" cy="1.6" r="0.9" fill="#1e3a8a" />
-      </svg>
+      <div style={{ perspective: `${Math.round(size * 6)}px` }}>
+        <div
+          className="bf-scene relative"
+          style={{
+            width: size,
+            height: H,
+            transform: `rotateZ(${bank}deg) rotateX(${pitch}deg) rotateY(${yaw}deg)`,
+          }}
+        >
+          <div className="bf-wing bf-wing-l" style={{ animationDuration: `${flapDur}s` }}>
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 20 34"
+              preserveAspectRatio="none"
+              style={{ overflow: "visible", filter: `drop-shadow(0 0 5px ${GLOW})`, transform: "scaleX(-1)" }}
+              aria-hidden
+            >
+              {WING}
+            </svg>
+          </div>
+          <div className="bf-wing bf-wing-r" style={{ animationDuration: `${flapDur}s` }}>
+            <svg
+              width="100%"
+              height="100%"
+              viewBox="0 0 20 34"
+              preserveAspectRatio="none"
+              style={{ overflow: "visible", filter: `drop-shadow(0 0 5px ${GLOW})` }}
+              aria-hidden
+            >
+              {WING}
+            </svg>
+          </div>
+          <svg
+            className="absolute"
+            viewBox="0 0 6 34"
+            preserveAspectRatio="none"
+            style={{ left: "50%", top: 0, width: bodyW, height: H, transform: "translateX(-50%) translateZ(2px)" }}
+            aria-hidden
+          >
+            <ellipse cx="3" cy="18" rx="1.3" ry="8" fill="#1e3a8a" />
+            <circle cx="3" cy="9.5" r="1.7" fill="#1e3a8a" />
+            <g stroke="#1e3a8a" strokeWidth="0.9" fill="none" strokeLinecap="round">
+              <path d="M3 9 C2 4 1.6 3 0.8 1.6" />
+              <path d="M3 9 C4 4 4.4 3 5.2 1.6" />
+            </g>
+            <circle cx="0.8" cy="1.4" r="0.8" fill="#1e3a8a" />
+            <circle cx="5.2" cy="1.4" r="0.8" fill="#1e3a8a" />
+          </svg>
+        </div>
+      </div>
     </motion.div>
   );
 }
