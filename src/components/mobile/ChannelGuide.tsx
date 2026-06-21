@@ -96,9 +96,9 @@ export function ChannelGuide({ onSelect }: Props) {
             <WeatherChip />
             <span className="font-p4-tele text-base text-[#7ee07e] p4-glow-green">▶ ENTER</span>
           </div>
-
-          <VelvetButterfly />
         </div>
+
+        <VelvetButterfly />
       </TVOverlay>
     </motion.div>
   );
