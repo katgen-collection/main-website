@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { TVOverlay } from "./TVOverlay";
 import { ChannelIcon } from "./ChannelIcon";
 import { CHANNELS, type ChannelId } from "./mobileData";
@@ -15,6 +15,7 @@ interface Props {
 }
 
 export function ChannelGuide({ onSelect }: Props) {
+  const reduce = useReducedMotion();
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -24,8 +25,8 @@ export function ChannelGuide({ onSelect }: Props) {
   return (
     <motion.div
       className="absolute inset-0"
-      initial={{ opacity: 0, scaleY: 0.6 }}
-      animate={{ opacity: 1, scaleY: 1 }}
+      initial={reduce ? { opacity: 0 } : { opacity: 0, scaleY: 0.6 }}
+      animate={reduce ? { opacity: 1 } : { opacity: 1, scaleY: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
