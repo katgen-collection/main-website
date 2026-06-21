@@ -24,7 +24,7 @@ export function ContactChannel({ onBack }: Props) {
   const reduce = useReducedMotion();
   return (
     <motion.div className="absolute inset-0" style={{ transformOrigin: "center" }} {...crtMotion(reduce)}>
-      <VelvetButterfly />
+      <VelvetButterfly minSize={20} maxSize={32} minDelay={8000} maxDelay={14000} />
       <ChannelShell ch="03" label="CONTACT" onBack={onBack}>
         {/* transmission graphic (Velvet Room blue) */}
         <div className="relative mx-auto mt-1 h-24 w-24">

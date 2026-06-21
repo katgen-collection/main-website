@@ -23,7 +23,7 @@ export function MeChannel({ onBack }: Props) {
   const reduce = useReducedMotion();
   return (
     <motion.div className="absolute inset-0" style={{ transformOrigin: "center" }} {...crtMotion(reduce)}>
-      <VelvetButterfly />
+      <VelvetButterfly minSize={20} maxSize={32} minDelay={8000} maxDelay={14000} />
       <ChannelShell ch="02" label="ME" onBack={onBack}>
         <div className="flex items-center gap-2 font-p4-label text-[10px] uppercase tracking-[0.18em] text-[#6b7148]">
           VIEWER PROFILE

@@ -28,7 +28,6 @@ function Butterfly({
   const duration = 6 + rnd(seed * 17 + 3) * 3.5; // 6-9.5s
   const delay = rnd(seed * 19 + 4) * 1.6; // stagger
   const size = minSize + rnd(seed * 23 + 5) * (maxSize - minSize);
-  const gid = `bw${seed}`;
 
   return (
     <motion.div
@@ -44,35 +43,26 @@ function Butterfly({
     >
       <svg
         width={size}
-        height={Math.round(size * 0.83)}
-        viewBox="0 0 48 40"
+        height={Math.round(size * 0.85)}
+        viewBox="0 0 40 34"
         className="p4-flap"
         style={{ filter: `drop-shadow(0 0 6px ${GLOW})`, transform: fromLeft ? "none" : "scaleX(-1)" }}
         aria-hidden
       >
-        <defs>
-          <linearGradient id={gid} x1="0" y1="0" x2="0.4" y2="1">
-            <stop offset="0%" stopColor="#e0f2fe" />
-            <stop offset="55%" stopColor="#7dd3fc" />
-            <stop offset="100%" stopColor="#38bdf8" />
-          </linearGradient>
-        </defs>
-        <g stroke="#0ea5e9" strokeWidth="0.6">
-          <path d={`M24 17 C 30 5, 45 3, 45 14 C 45 23, 32 23, 24 19 Z`} fill={`url(#${gid})`} />
-          <path d={`M24 20 C 31 23, 41 27, 37 36 C 33 42, 25 33, 24 24 Z`} fill={`url(#${gid})`} />
-          <path d={`M24 17 C 18 5, 3 3, 3 14 C 3 23, 16 23, 24 19 Z`} fill={`url(#${gid})`} />
-          <path d={`M24 20 C 17 23, 7 27, 11 36 C 15 42, 23 33, 24 24 Z`} fill={`url(#${gid})`} />
+        <g stroke="#0284c7" strokeWidth="0.7" strokeLinejoin="round">
+          <path d="M20 12 L37 5 Q39.5 11 34 16 L21 17 Z" fill="#7dd3fc" />
+          <path d="M20 12 L3 5 Q0.5 11 6 16 L19 17 Z" fill="#7dd3fc" />
+          <path d="M21 18 L33 27 Q30.5 34 25 31 L20 22 Z" fill="#38bdf8" />
+          <path d="M19 18 L7 27 Q9.5 34 15 31 L20 22 Z" fill="#38bdf8" />
         </g>
-        <circle cx="38" cy="12" r="2" fill="#e0f2fe" opacity="0.85" />
-        <circle cx="10" cy="12" r="2" fill="#e0f2fe" opacity="0.85" />
-        <ellipse cx="24" cy="20" rx="1.6" ry="9.5" fill="#1e3a8a" />
-        <circle cx="24" cy="10.5" r="2" fill="#1e3a8a" />
+        <ellipse cx="20" cy="18" rx="1.4" ry="8" fill="#1e3a8a" />
+        <circle cx="20" cy="9.5" r="1.8" fill="#1e3a8a" />
         <g stroke="#1e3a8a" strokeWidth="0.9" fill="none" strokeLinecap="round">
-          <path d="M24 10 C 22 5, 20 4, 18.5 2.5" />
-          <path d="M24 10 C 26 5, 28 4, 29.5 2.5" />
+          <path d="M20 9 C18 4 17 3 15.6 1.8" />
+          <path d="M20 9 C22 4 23 3 24.4 1.8" />
         </g>
-        <circle cx="18.3" cy="2.3" r="0.9" fill="#1e3a8a" />
-        <circle cx="29.7" cy="2.3" r="0.9" fill="#1e3a8a" />
+        <circle cx="15.4" cy="1.6" r="0.9" fill="#1e3a8a" />
+        <circle cx="24.6" cy="1.6" r="0.9" fill="#1e3a8a" />
       </svg>
     </motion.div>
   );

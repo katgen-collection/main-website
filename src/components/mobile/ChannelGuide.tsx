@@ -98,7 +98,7 @@ export function ChannelGuide({ onSelect }: Props) {
           </div>
         </div>
 
-        <VelvetButterfly />
+        <VelvetButterfly minSize={20} maxSize={32} minDelay={8000} maxDelay={14000} />
       </TVOverlay>
     </motion.div>
   );
