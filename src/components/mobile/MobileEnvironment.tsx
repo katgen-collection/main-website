@@ -68,6 +68,10 @@ export function MobileEnvironment({ onSwitchToWebsite }: Props) {
     setPhase("tuning");
   }, []);
 
+  // The Velvet Room renders its own FX toggle inside its header (gold-on-blue),
+  // so suppress the global one there to avoid a second, mismatched button.
+  const inVelvet = phase === "channel" && active === "velvet";
+
   return (
     <div className="relative mx-auto h-[100dvh] w-full max-w-[480px] overflow-hidden bg-[#0d0b07] text-[#efe9cf]">
       <AnimatePresence mode="wait">
@@ -95,10 +99,13 @@ export function MobileEnvironment({ onSwitchToWebsite }: Props) {
         {phase === "channel" && active === "velvet" && <VelvetRoom key="velvet" onBack={backToGuide} />}
       </AnimatePresence>
 
-      {/* FX toggle (sound + haptics; muted by default) */}
-      <div className="absolute right-3 top-3 z-[60]">
-        <SoundToggle />
-      </div>
+      {/* FX toggle (sound + haptics; muted by default). Hidden in the Velvet
+          Room, which renders its own matching toggle inside its header. */}
+      {!inVelvet && (
+        <div className="absolute right-3 top-3 z-[60]">
+          <SoundToggle />
+        </div>
+      )}
     </div>
   );
 }
