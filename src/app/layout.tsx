@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter, Space_Grotesk, JetBrains_Mono, Rubik_Mono_One, VT323, DotGothic16 } from "next/font/google"
+import { Inter, Space_Grotesk, JetBrains_Mono, Rubik_Mono_One, VT323, DotGothic16, Cinzel } from "next/font/google"
 import localFont from "next/font/local";
 import "./globals.css"
 
@@ -17,6 +17,8 @@ const rubikMonoOne = Rubik_Mono_One({ subsets: ["latin"], weight: "400", variabl
 const vt323 = VT323({ subsets: ["latin"], weight: "400", variable: "--font-p4-tele" })
 // P4 mobile OS - pixel labels and channel tags
 const dotGothic = DotGothic16({ subsets: ["latin"], weight: "400", variable: "--font-p4-label" })
+// Velvet Room - ornate engraved serif (the hidden blue world)
+const cinzel = Cinzel({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-velvet" })
 
 const p5_font = localFont({
   src: [
@@ -37,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${p5_font.variable} ${rubikMonoOne.variable} ${vt323.variable} ${dotGothic.variable} font-sans bg-black text-white`}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${p5_font.variable} ${rubikMonoOne.variable} ${vt323.variable} ${dotGothic.variable} ${cinzel.variable} font-sans bg-black text-white`}>
           {children}
       </body>
     </html>
