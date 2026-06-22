@@ -14,6 +14,7 @@ import { DesktopBackground } from './DesktopBackground';
 import { AllOutAttack } from './AllOutAttack';
 import { BattleMenu } from './BattleMenu';
 import { VelvetButterfly } from '../mobile/VelvetButterfly';
+import { DesktopVelvetRoom } from './DesktopVelvetRoom';
 
 interface DesktopEnvironmentProps {
   onSwitchToLegacy: () => void;
@@ -26,6 +27,7 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
   const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
   const [currentTime, setCurrentTime] = useState<string>('');
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
+  const [velvetOpen, setVelvetOpen] = useState(false);
 
   useEffect(() => {
     setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -259,8 +261,17 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
             </div>
           </Window>
 
-          {/* Velvet Room butterflies drifting over the desktop */}
-          <VelvetButterfly minCount={1} maxCount={3} minSize={34} maxSize={58} minDelay={7000} maxDelay={16000} zClass="z-30" />
+          {/* Velvet Room butterflies drifting over the desktop; catch one to enter */}
+          <VelvetButterfly
+            minCount={1}
+            maxCount={3}
+            minSize={34}
+            maxSize={58}
+            minDelay={7000}
+            maxDelay={16000}
+            zClass="z-30"
+            onCatch={() => setVelvetOpen(true)}
+          />
 
           {/* Taskbar */}
           <Taskbar
@@ -280,6 +291,11 @@ export const DesktopEnvironment: React.FC<DesktopEnvironmentProps> = ({ onSwitch
           )}
         </motion.div>
       )}
+
+      {/* The hidden Velvet Room, summoned by catching a butterfly */}
+      <AnimatePresence>
+        {velvetOpen && <DesktopVelvetRoom key="velvet" onClose={() => setVelvetOpen(false)} />}
+      </AnimatePresence>
     </div>
   );
 };
