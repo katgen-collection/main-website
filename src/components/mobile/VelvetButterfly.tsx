@@ -12,8 +12,8 @@ function rnd(seed: number) {
   return x - Math.floor(x);
 }
 
-// One butterfly's wing (mirrored for the other side). Inner edge sits at the
-// body axis so it can hinge there in 3D.
+// One side's wing (mirrored for the other). Inner edge at the body axis so it
+// can hinge there in 3D.
 const WING = (
   <g stroke="#0284c7" strokeWidth="0.7" strokeLinejoin="round">
     <path d="M0 12 L17 5 Q19.5 11 14 16 L1 17 Z" fill="#7dd3fc" />
@@ -26,11 +26,13 @@ function Butterfly({
   minSize,
   maxSize,
   zClass,
+  onCatch,
 }: {
   seed: number;
   minSize: number;
   maxSize: number;
   zClass: string;
+  onCatch?: () => void;
 }) {
   const fromLeft = rnd(seed * 7 + 1) > 0.5;
   const band = 8 + rnd(seed * 13 + 2) * 70; // vertical band, percent
@@ -47,11 +49,13 @@ function Butterfly({
 
   const H = Math.round(size * 0.85);
   const bodyW = Math.max(3, Math.round((H * 6) / 34));
+  const catchable = !!onCatch;
 
   return (
     <motion.div
-      className={`pointer-events-none absolute ${zClass}`}
+      className={`absolute ${zClass} ${catchable ? "pointer-events-auto cursor-pointer" : "pointer-events-none"}`}
       style={{ top: 0, left: 0 }}
+      onClick={onCatch}
       initial={{ left: fromLeft ? "-16%" : "112%", top: `${band}%`, opacity: 0 }}
       animate={{
         left: fromLeft ? "112%" : "-16%",
@@ -127,12 +131,14 @@ interface Props {
   maxDelay?: number;
   /** Tailwind z-index class for stacking against the host screen. */
   zClass?: string;
+  /** When set, butterflies become tappable and call this on tap (the Velvet Room). */
+  onCatch?: () => void;
 }
 
 /**
- * A rare Velvet Room moment: a small swarm of bright sky-blue butterflies drifts
- * across the screen now and then. Reusable across screens via props. Disabled
- * under reduced motion.
+ * A rare Velvet Room moment: a small swarm of bright sky-blue 3D butterflies
+ * drifts across the screen now and then. Reusable across screens via props.
+ * Disabled under reduced motion.
  */
 export function VelvetButterfly({
   minCount = 2,
@@ -142,6 +148,7 @@ export function VelvetButterfly({
   minDelay = 5000,
   maxDelay = 13000,
   zClass = "z-50",
+  onCatch,
 }: Props = {}) {
   const reduce = useReducedMotion();
   const [burst, setBurst] = useState(0);
@@ -174,7 +181,14 @@ export function VelvetButterfly({
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
-        <Butterfly key={`${burst}-${i}`} seed={burst * 100 + i} minSize={minSize} maxSize={maxSize} zClass={zClass} />
+        <Butterfly
+          key={`${burst}-${i}`}
+          seed={burst * 100 + i}
+          minSize={minSize}
+          maxSize={maxSize}
+          zClass={zClass}
+          onCatch={onCatch}
+        />
       ))}
     </>
   );

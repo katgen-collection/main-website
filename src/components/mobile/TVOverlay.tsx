@@ -1,7 +1,8 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { motion } from "framer-motion";
+import { usePullToDismiss } from "./usePullToDismiss";
 
 interface OverlayProps {
   children: ReactNode;
@@ -42,8 +43,17 @@ interface ShellProps {
  * scrollable body, a red chyron lower-third, and the CRT texture stack.
  */
 export function ChannelShell({ ch, label, onBack, children }: ShellProps) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const { pull, handlers } = usePullToDismiss(onBack, bodyRef);
   return (
-    <div className="relative flex h-full w-full flex-col overflow-hidden bg-[#0a0b06] text-[#efe9cf]">
+    <div
+      className="relative flex h-full w-full flex-col overflow-hidden bg-[#0a0b06] text-[#efe9cf]"
+      style={{
+        transform: pull ? `translateY(${pull}px)` : undefined,
+        transition: pull ? "none" : "transform 0.2s ease-out",
+      }}
+      {...handlers}
+    >
       {/* REC bar (extra right padding clears the floating SFX toggle) */}
       <div className="relative z-20 flex items-center gap-3 pl-4 pr-24 pt-4 pb-1">
         <button
@@ -68,7 +78,9 @@ export function ChannelShell({ ch, label, onBack, children }: ShellProps) {
       </div>
 
       {/* body */}
-      <div className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden px-4 py-3">{children}</div>
+      <div ref={bodyRef} className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden px-4 py-3">
+        {children}
+      </div>
 
       {/* chyron lower-third */}
       <div className="relative z-20 shrink-0">

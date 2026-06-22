@@ -16,15 +16,16 @@ const LINKS = [
 
 interface Props {
   onBack: () => void;
+  onCatchButterfly?: () => void;
 }
 
 /** Contact rendered as a transmission: signal waves, an OPEN LINE indicator
  *  (the single subtle Velvet Room blue accent), a glowing mailto, and links. */
-export function ContactChannel({ onBack }: Props) {
+export function ContactChannel({ onBack, onCatchButterfly }: Props) {
   const reduce = useReducedMotion();
   return (
     <motion.div className="absolute inset-0" style={{ transformOrigin: "center" }} {...crtMotion(reduce)}>
-      <VelvetButterfly minSize={20} maxSize={32} minDelay={8000} maxDelay={14000} />
+      <VelvetButterfly minSize={20} maxSize={32} minDelay={8000} maxDelay={14000} onCatch={onCatchButterfly} />
       <ChannelShell ch="03" label="CONTACT" onBack={onBack}>
         {/* transmission graphic (Velvet Room blue) */}
         <div className="relative mx-auto mt-1 h-24 w-24">

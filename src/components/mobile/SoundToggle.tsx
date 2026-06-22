@@ -24,7 +24,7 @@ export function SoundToggle() {
       className="flex items-center gap-1.5 border border-[#3a4226] bg-[#0e0f08]/80 px-2 py-1 font-p4-tele text-sm leading-none text-[#8fd6d6] active:border-[#f5c518]"
     >
       {muted ? <VolumeX className="h-4 w-4" aria-hidden /> : <Volume2 className="h-4 w-4" aria-hidden />}
-      SFX {muted ? "OFF" : "ON"}
+      FX {muted ? "OFF" : "ON"}
     </button>
   );
 }

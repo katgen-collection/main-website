@@ -18,10 +18,11 @@ const TICKER =
 
 interface Props {
   onSelect: (id: ChannelId) => void;
+  onCatchButterfly?: () => void;
 }
 
 /** Home screen styled as an on-screen channel guide (EPG) with a live preview. */
-export function ChannelGuide({ onSelect }: Props) {
+export function ChannelGuide({ onSelect, onCatchButterfly }: Props) {
   const reduce = useReducedMotion();
   const [now, setNow] = useState(() => new Date());
   useEffect(() => {
@@ -98,7 +99,7 @@ export function ChannelGuide({ onSelect }: Props) {
           </div>
         </div>
 
-        <VelvetButterfly minSize={20} maxSize={32} minDelay={8000} maxDelay={14000} />
+        <VelvetButterfly minSize={20} maxSize={32} minDelay={8000} maxDelay={14000} onCatch={onCatchButterfly} />
       </TVOverlay>
     </motion.div>
   );

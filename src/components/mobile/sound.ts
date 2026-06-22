@@ -136,9 +136,18 @@ class Sound {
     src.stop(now + dur + 0.05);
   }
 
+  /** Fire a haptic buzz (Android; iOS Safari has no vibrate and no-ops). */
+  private buzz(pattern: number | number[]) {
+    if (this.muted) return;
+    if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
+      navigator.vibrate(pattern);
+    }
+  }
+
   /** Short UI blip for taps. */
   blip() {
     this.tone(620, 0.06, 0.13, "square");
+    this.buzz(10);
   }
 
   /** Channel locks in: a thunk, a tick, and a short low burst. */
@@ -146,6 +155,7 @@ class Sound {
     this.tone(95, 0.18, 0.32, "square", 42);
     this.tone(1600, 0.05, 0.07, "square");
     this.noise(0.06, 0.1, { type: "lowpass", freq: 800 });
+    this.buzz([12, 26, 12]);
   }
 
   /** Degauss-style power thunk when the tube energizes. */
@@ -153,12 +163,21 @@ class Sound {
     this.tone(55, 0.3, 0.3, "sine", 180);
     this.tone(2200, 0.28, 0.05, "sine", 380);
     this.noise(0.1, 0.08, { type: "highpass", freq: 1200 });
+    this.buzz(28);
   }
 
   /** Channel-change: sweeping static plus a descending flyback whine. */
   tune() {
     this.noiseSweep(0.7, 0.18, 700, 2600);
     this.tone(1300, 0.7, 0.05, "sawtooth", 280);
+    this.buzz(18);
+  }
+
+  /** Velvet Room discovery: a soft chime and a fluttering haptic. */
+  flutter() {
+    this.tone(1320, 0.12, 0.06, "sine");
+    this.tone(1760, 0.22, 0.05, "sine", 1980);
+    this.buzz([8, 16, 8, 16, 8]);
   }
 }
 
