@@ -2,7 +2,10 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Monitor } from "lucide-react";
+import { Monitor, Tv } from "lucide-react";
+
+/** Which gimmick OS this device will enter: the P5 desktop or the P4 channel. */
+type Target = "desktop" | "mobile";
 
 const NAV = [
   { href: "/#work", label: "Work" },
@@ -15,7 +18,7 @@ const NAV = [
  * Shared editorial top nav. On the home page it receives `onDesktop` (toggles
  * view state); on standalone routes it omits it and links back to "/" instead.
  */
-export function SiteNav({ onDesktop }: { onDesktop?: () => void }) {
+export function SiteNav({ onDesktop, target = "desktop" }: { onDesktop?: () => void; target?: Target }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -27,6 +30,11 @@ export function SiteNav({ onDesktop }: { onDesktop?: () => void }) {
 
   const desktopClasses =
     "flex items-center gap-2 font-code text-xs uppercase tracking-[0.15em] text-[#8A8A94] hover:text-violet-400 transition-colors";
+
+  // Subtle per-device hint at the gimmick OS on the other side of the button.
+  const Icon = target === "mobile" ? Tv : Monitor;
+  const label = target === "mobile" ? "Tune In" : "Desktop";
+  const title = target === "mobile" ? "Tune in to the Midnight Channel" : "Switch to desktop mode";
 
   return (
     <header
@@ -52,14 +60,14 @@ export function SiteNav({ onDesktop }: { onDesktop?: () => void }) {
           ))}
         </nav>
         {onDesktop ? (
-          <button onClick={onDesktop} title="Switch to desktop mode" className={desktopClasses}>
-            <Monitor className="w-4 h-4" />
-            <span className="hidden sm:inline">Desktop</span>
+          <button onClick={onDesktop} title={title} className={desktopClasses}>
+            <Icon className="w-4 h-4" />
+            <span className="hidden sm:inline">{label}</span>
           </button>
         ) : (
-          <Link href="/" title="Switch to desktop mode" className={desktopClasses}>
-            <Monitor className="w-4 h-4" />
-            <span className="hidden sm:inline">Desktop</span>
+          <Link href="/" title={title} className={desktopClasses}>
+            <Icon className="w-4 h-4" />
+            <span className="hidden sm:inline">{label}</span>
           </Link>
         )}
       </div>
@@ -67,8 +75,9 @@ export function SiteNav({ onDesktop }: { onDesktop?: () => void }) {
   );
 }
 
-export function SiteFooter({ onDesktop }: { onDesktop?: () => void }) {
-  const label = "font-code text-[11px] uppercase tracking-[0.15em] text-[#6B6B74] hover:text-violet-400 transition-colors";
+export function SiteFooter({ onDesktop, target = "desktop" }: { onDesktop?: () => void; target?: Target }) {
+  const cls = "font-code text-[11px] uppercase tracking-[0.15em] text-[#6B6B74] hover:text-violet-400 transition-colors";
+  const text = target === "mobile" ? "Tune in →" : "Enter desktop mode →";
   return (
     <footer className="border-t border-white/[0.07]">
       <div className="max-w-[1500px] mx-auto px-6 lg:px-10 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -76,12 +85,12 @@ export function SiteFooter({ onDesktop }: { onDesktop?: () => void }) {
           © {new Date().getFullYear()} Mikhail Haritz
         </p>
         {onDesktop ? (
-          <button onClick={onDesktop} className={label}>
-            Enter desktop mode →
+          <button onClick={onDesktop} className={cls}>
+            {text}
           </button>
         ) : (
-          <Link href="/" className={label}>
-            Enter desktop mode →
+          <Link href="/" className={cls}>
+            {text}
           </Link>
         )}
       </div>

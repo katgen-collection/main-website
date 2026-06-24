@@ -14,6 +14,8 @@ const RESUME_URL =
 
 interface SiteHomeProps {
   onSwitchToDesktop: () => void;
+  /** Which gimmick OS this device enters; tunes the switch button's look. */
+  target?: "desktop" | "mobile";
 }
 
 /** Mono section eyebrow, e.g. "02 / SELECTED WORK". */
@@ -55,10 +57,10 @@ const FACTS = [
   { k: "Status", v: "Open to opportunities" },
 ];
 
-export default function SiteHome({ onSwitchToDesktop }: SiteHomeProps) {
+export default function SiteHome({ onSwitchToDesktop, target = "desktop" }: SiteHomeProps) {
   return (
     <div className="min-h-screen bg-[#0B0C10] text-[#ECECEE] antialiased selection:bg-violet-500/30">
-      <SiteNav onDesktop={onSwitchToDesktop} />
+      <SiteNav onDesktop={onSwitchToDesktop} target={target} />
 
       {/* ---- Hero (full-bleed) ---- */}
       <section id="top" className="relative w-full min-h-screen overflow-hidden flex flex-col justify-center scroll-mt-20">
@@ -282,7 +284,7 @@ export default function SiteHome({ onSwitchToDesktop }: SiteHomeProps) {
         </section>
       </main>
 
-      <SiteFooter onDesktop={onSwitchToDesktop} />
+      <SiteFooter onDesktop={onSwitchToDesktop} target={target} />
     </div>
   );
 }

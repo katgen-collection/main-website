@@ -3,6 +3,7 @@
 import { DesktopEnvironment } from "@/components/desktop/DesktopEnvironment";
 import { MobileEnvironment } from "@/components/mobile/MobileEnvironment";
 import SiteHome from "./SiteHome";
+import { ModeTransition } from "./ModeTransition";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,6 +13,8 @@ export default function HomeClient() {
   const [viewMode, setViewMode] = useState<ViewMode>("desktop");
   const [deviceIsMobile, setDeviceIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // Themed pro -> gimmick hand-off; null when not transitioning.
+  const [transitioning, setTransitioning] = useState<"desktop" | "mobile" | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -29,6 +32,8 @@ export default function HomeClient() {
   }, []);
 
   if (!mounted) return null;
+
+  const target: "desktop" | "mobile" = deviceIsMobile ? "mobile" : "desktop";
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
@@ -66,8 +71,21 @@ export default function HomeClient() {
             transition={{ duration: 0.5 }}
             className="min-h-screen"
           >
-            <SiteHome onSwitchToDesktop={() => setViewMode(deviceIsMobile ? "mobile" : "desktop")} />
+            <SiteHome onSwitchToDesktop={() => setTransitioning(target)} target={target} />
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Themed hand-off from the pro site into a gimmick OS. Swaps the view at
+          its midpoint (hidden behind full coverage), then clears to reveal it. */}
+      <AnimatePresence>
+        {transitioning && (
+          <ModeTransition
+            key="mode-transition"
+            variant={transitioning}
+            onMidpoint={() => setViewMode(transitioning)}
+            onDone={() => setTransitioning(null)}
+          />
         )}
       </AnimatePresence>
     </div>

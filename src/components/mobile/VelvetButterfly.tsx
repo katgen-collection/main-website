@@ -25,18 +25,22 @@ function Butterfly({
   seed,
   minSize,
   maxSize,
+  minDuration,
+  maxDuration,
   zClass,
   onCatch,
 }: {
   seed: number;
   minSize: number;
   maxSize: number;
+  minDuration: number;
+  maxDuration: number;
   zClass: string;
   onCatch?: () => void;
 }) {
   const fromLeft = rnd(seed * 7 + 1) > 0.5;
   const band = 8 + rnd(seed * 13 + 2) * 70; // vertical band, percent
-  const duration = 6 + rnd(seed * 17 + 3) * 3.5; // 6-9.5s
+  const duration = minDuration + rnd(seed * 17 + 3) * Math.max(0, maxDuration - minDuration);
   const delay = rnd(seed * 19 + 4) * 1.6; // stagger
   const size = minSize + rnd(seed * 23 + 5) * (maxSize - minSize);
 
@@ -54,7 +58,9 @@ function Butterfly({
   return (
     <motion.div
       className={`absolute ${zClass} ${catchable ? "pointer-events-auto cursor-pointer" : "pointer-events-none"}`}
-      style={{ top: 0, left: 0 }}
+      // When catchable, pad the box out (with a matching negative margin so the
+      // visual stays put) to give an easy, forgiving click target for trackpads.
+      style={catchable ? { top: 0, left: 0, padding: 18, margin: -18 } : { top: 0, left: 0 }}
       onClick={onCatch}
       initial={{ left: fromLeft ? "-16%" : "112%", top: `${band}%`, opacity: 0 }}
       animate={{
@@ -126,6 +132,9 @@ interface Props {
   /** Min/max butterfly size in px. */
   minSize?: number;
   maxSize?: number;
+  /** Min/max screen-crossing time in seconds (lower = faster). */
+  minDuration?: number;
+  maxDuration?: number;
   /** Min/max gap between visits in ms. */
   minDelay?: number;
   maxDelay?: number;
@@ -145,6 +154,8 @@ export function VelvetButterfly({
   maxCount = 4,
   minSize = 28,
   maxSize = 46,
+  minDuration = 6,
+  maxDuration = 9.5,
   minDelay = 5000,
   maxDelay = 13000,
   zClass = "z-50",
@@ -186,6 +197,8 @@ export function VelvetButterfly({
           seed={burst * 100 + i}
           minSize={minSize}
           maxSize={maxSize}
+          minDuration={minDuration}
+          maxDuration={maxDuration}
           zClass={zClass}
           onCatch={onCatch}
         />
