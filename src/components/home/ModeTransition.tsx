@@ -4,7 +4,8 @@ import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 
 interface Props {
-  /** Which gimmick OS we are tuning into. */
+  /** Which gimmick OS's theme this hand-off wears (tied to the gimmick side,
+   *  not the destination, so it matches in both directions). */
   variant: "desktop" | "mobile";
   /** Fired once the screen is fully covered: swap the mode underneath here. */
   onMidpoint: () => void;
@@ -12,31 +13,15 @@ interface Props {
   onDone: () => void;
 }
 
-// P5 red pinstripe field, shared by the flip card and its shards so they read
-// as one surface right up until it breaks apart.
-const P5_FIELD: React.CSSProperties = {
-  backgroundColor: "#b11218",
-  backgroundImage:
-    "repeating-linear-gradient(115deg, rgba(0,0,0,0) 0 26px, rgba(0,0,0,0.22) 26px 30px)",
-};
-
-// Five angular slices that tile the viewport (adjacent slices share edges), each
-// with the direction it flies when the card shatters.
-const SHARDS = [
-  { clip: "polygon(0% 0%, 22% 0%, 14% 100%, 0% 100%)", x: "-120%", y: "-18%", rot: -26 },
-  { clip: "polygon(22% 0%, 40% 0%, 48% 100%, 14% 100%)", x: "-55%", y: "34%", rot: 17 },
-  { clip: "polygon(40% 0%, 62% 0%, 54% 100%, 48% 100%)", x: "0%", y: "-130%", rot: -9 },
-  { clip: "polygon(62% 0%, 80% 0%, 88% 100%, 54% 100%)", x: "55%", y: "34%", rot: -17 },
-  { clip: "polygon(80% 0%, 100% 0%, 100% 100%, 88% 100%)", x: "120%", y: "-18%", rot: 26 },
-];
-
 /**
- * The themed hand-off played when leaving the pro site for a gimmick OS. It
- * covers the screen, calls `onMidpoint` (where the caller swaps the view), then
- * clears to reveal the new mode's lock screen.
+ * The themed hand-off played whenever the pro site and a gimmick OS swap
+ * places. It covers the screen, calls `onMidpoint` (where the caller swaps the
+ * view), then clears to reveal the other side.
  *
- *  - desktop: a P5 red card flips down to cover, then shatters into shards.
- *  - mobile: a P4 Midnight-Channel yellow fog washes in, then lifts away.
+ *  - desktop: a P5 red vertigo swirl spins up and smears the screen red, then
+ *    unwinds away.
+ *  - mobile: a P4 channel-flip, all static, roll, RGB split and signal-hunt,
+ *    that snaps to the other side like a TV finding its frequency.
  */
 export function ModeTransition({ variant, onMidpoint, onDone }: Props) {
   const reduce = useReducedMotion();
@@ -62,74 +47,130 @@ export function ModeTransition({ variant, onMidpoint, onDone }: Props) {
   }
 
   if (variant === "mobile") {
+    const dur = phase === "in" ? 0.8 : 0.6;
+    // Static creeps gradually out of the current screen, then recedes into the
+    // next one. A 4-stop ramp so it builds (and clears) progressively.
+    const ramp = phase === "in" ? [0, 0.25, 0.6, 1] : [1, 0.55, 0.2, 0];
+    const rampTimes = [0, 0.4, 0.75, 1];
     return (
       <div className="fixed inset-0 z-[200] overflow-hidden">
+        {/* darkening base; also drives the timing of each phase. Starts clear so
+            the screen you're leaving shows through as the static moves in. */}
+        <motion.div
+          className="absolute inset-0 bg-black"
+          initial={{ opacity: phase === "in" ? 0 : 1 }}
+          animate={{ opacity: ramp }}
+          transition={{ duration: dur, times: rampTimes, ease: "linear" }}
+          onAnimationComplete={() => (phase === "in" ? cover() : onDone())}
+        />
+
+        {/* TV static snow */}
+        <motion.div
+          className="absolute inset-0 p4-grain"
+          initial={{ opacity: phase === "in" ? 0 : 1 }}
+          animate={{ opacity: ramp }}
+          transition={{ duration: dur, times: rampTimes, ease: "linear" }}
+          aria-hidden
+        />
+
+        {/* horizontal static lines, rolling slowly down the screen */}
         <motion.div
           className="absolute inset-0"
           style={{
-            background:
-              "radial-gradient(120% 90% at 50% 28%, #fbe36b 0%, #e9c81b 36%, #b89400 74%, #5f4b00 100%)",
+            backgroundImage:
+              "repeating-linear-gradient(0deg, rgba(255,255,255,0.18) 0 1px, rgba(0,0,0,0) 1px 3px), repeating-linear-gradient(0deg, rgba(0,0,0,0.35) 0 2px, rgba(0,0,0,0) 2px 10px)",
           }}
-          initial={{ opacity: 0, y: "-8%" }}
-          animate={phase === "in" ? { opacity: 1, y: "0%" } : { opacity: 0, y: "-14%" }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          onAnimationComplete={() => (phase === "in" ? cover() : onDone())}
-        >
-          <div className="absolute inset-0 p4-grain opacity-70" aria-hidden />
-          <div className="absolute inset-0 p4-scanlines opacity-30" aria-hidden />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-p4-tele text-2xl uppercase tracking-[0.45em] text-black/55">
-              tuning in
-            </span>
-          </div>
-        </motion.div>
+          initial={{ opacity: phase === "in" ? 0 : 1, backgroundPositionY: "0px" }}
+          animate={{ opacity: phase === "in" ? 1 : 0, backgroundPositionY: "70px" }}
+          transition={{ duration: dur, ease: "linear" }}
+          aria-hidden
+        />
 
-        {/* a single bright scan band sweeps down as it tunes in */}
-        {phase === "in" && (
-          <motion.div
-            className="pointer-events-none absolute inset-x-0 h-24"
-            style={{ background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.5), transparent)" }}
-            initial={{ top: "-20%" }}
-            animate={{ top: "112%" }}
-            transition={{ duration: 0.5, ease: "linear" }}
-            aria-hidden
-          />
-        )}
+        {/* a thicker tear band drifting vertically */}
+        <motion.div
+          className="absolute inset-x-0 h-12"
+          style={{ background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.45), transparent)" }}
+          initial={{ opacity: phase === "in" ? 0 : 0.5, top: "12%" }}
+          animate={{ opacity: phase === "in" ? [0, 0.5, 0.5, 0.45] : [0.5, 0.3, 0.1, 0], top: ["8%", "38%", "62%", "88%"] }}
+          transition={{ duration: dur, ease: "linear" }}
+          aria-hidden
+        />
+
+        {/* yellow Midnight-Channel tint creeping in */}
+        <motion.div
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(120% 90% at 50% 40%, rgba(233,200,27,0.5), rgba(120,95,0,0.18))",
+            mixBlendMode: "screen",
+          }}
+          initial={{ opacity: phase === "in" ? 0 : 0.7 }}
+          animate={{ opacity: ramp.map((v) => v * 0.7) }}
+          transition={{ duration: dur, times: rampTimes, ease: "linear" }}
+          aria-hidden
+        />
       </div>
     );
   }
 
-  // desktop: P5 card flips down to cover, then shatters apart
+  // desktop: a P5 red vertigo swirl that spins up to smear the screen, then unwinds away
+  const dur = phase === "in" ? 0.45 : 0.5;
   return (
-    <div className="fixed inset-0 z-[200] overflow-hidden" style={{ perspective: 1400 }}>
-      {phase === "in" ? (
-        <motion.div
-          className="absolute inset-0 origin-bottom"
-          style={P5_FIELD}
-          initial={{ rotateX: 92, opacity: 0.25 }}
-          animate={{ rotateX: 0, opacity: 1 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          onAnimationComplete={cover}
+    <div className="fixed inset-0 z-[200] overflow-hidden">
+      {/* solid red cover that also drives the phase timing */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ backgroundColor: "#c01616" }}
+        initial={{ opacity: 0 }}
+        animate={phase === "in" ? { opacity: [0, 1, 1] } : { opacity: [1, 1, 0] }}
+        transition={{
+          duration: dur,
+          times: [0, 0.55, 1],
+          ease: phase === "in" ? [0.7, 0, 0.84, 0] : [0.16, 1, 0.3, 1],
+        }}
+        onAnimationComplete={() => (phase === "in" ? cover() : onDone())}
+      />
+
+      {/* the spinning red swirl */}
+      <motion.div
+        className="absolute left-1/2 top-1/2 aspect-square w-[160vmax]"
+        style={{
+          translateX: "-50%",
+          translateY: "-50%",
+          background:
+            "conic-gradient(from 0deg, #ef2b2b, #6f0c0c, #ef2b2b, #6f0c0c, #ef2b2b, #6f0c0c, #ef2b2b)",
+          filter: "blur(2px)",
+        }}
+        initial={{ rotate: 0, scale: 0.2, opacity: 0 }}
+        animate={phase === "in" ? { rotate: 220, scale: 1.1, opacity: 0.95 } : { rotate: 470, scale: 2.6, opacity: 0 }}
+        transition={{ duration: dur, ease: phase === "in" ? "easeIn" : "easeOut" }}
+        aria-hidden
+      />
+
+      {/* diagonal speed streaks for the smear */}
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(115deg, rgba(0,0,0,0.28) 0 10px, rgba(0,0,0,0) 10px 34px)",
+          mixBlendMode: "multiply",
+        }}
+        initial={{ opacity: 0, x: "-18%" }}
+        animate={phase === "in" ? { opacity: 0.8, x: "0%" } : { opacity: 0, x: "18%" }}
+        transition={{ duration: dur, ease: "easeInOut" }}
+        aria-hidden
+      />
+
+      {/* P5 splash text */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <motion.span
+          className="font-p5 text-6xl tracking-tighter text-white [word-spacing:0.4rem] drop-shadow-[3px_3px_0_rgba(0,0,0,0.85)]"
+          initial={{ opacity: 0, scale: 1.4, rotate: -6 }}
+          animate={phase === "in" ? { opacity: 1, scale: 1, rotate: -3 } : { opacity: 0, scale: 0.6, rotate: -3 }}
+          transition={{ duration: phase === "in" ? 0.4 : 0.3 }}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-p5 text-6xl tracking-tighter text-white [word-spacing:0.4rem] drop-shadow-[3px_3px_0_rgba(0,0,0,0.85)]">
-              MIKHAIL
-            </span>
-          </div>
-        </motion.div>
-      ) : (
-        SHARDS.map((s, i) => (
-          <motion.div
-            key={i}
-            className="absolute inset-0"
-            style={{ ...P5_FIELD, clipPath: s.clip, WebkitClipPath: s.clip }}
-            initial={{ x: 0, y: 0, rotate: 0, opacity: 1 }}
-            animate={{ x: s.x, y: s.y, rotate: s.rot, opacity: 0 }}
-            transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1], delay: i * 0.03 }}
-            onAnimationComplete={i === SHARDS.length - 1 ? onDone : undefined}
-          />
-        ))
-      )}
+          TAKE YOUR TIME
+        </motion.span>
+      </div>
     </div>
   );
 }
