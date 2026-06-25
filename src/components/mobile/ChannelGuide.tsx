@@ -14,7 +14,7 @@ function fmtTime(d: Date) {
 }
 
 const TICKER =
-  "THE MIDNIGHT CHANNEL  //  FORECAST: FOG, RAIN AFTER MIDNIGHT  //  NOW BROADCASTING: CH 01 PROJECTS  //  STAY TUNED  //";
+  "THE MIDNIGHT CHANNEL  //  FORECAST: FOG, RAIN AFTER MIDNIGHT  //  NOW BROADCASTING: CH 05 WEB  //  STAY TUNED  //";
 
 interface Props {
   onSelect: (id: ChannelId) => void;
@@ -70,15 +70,15 @@ export function ChannelGuide({ onSelect, onCatchButterfly }: Props) {
 
           {/* live preview pane */}
           <button
-            onClick={() => onSelect("projects")}
+            onClick={() => onSelect("web")}
             className="relative mt-3 flex h-20 w-full items-center gap-3 overflow-hidden border-2 border-[#f5c518] bg-[#070803] px-3 text-left shadow-[0_0_16px_rgba(245,197,24,0.25)]"
           >
             <span className="pointer-events-none absolute inset-0 p4-static opacity-25" aria-hidden />
             <span className="pointer-events-none absolute inset-0 p4-scanlines opacity-40" aria-hidden />
             <span className="relative">
               <span className="font-p4-label text-[10px] tracking-[0.2em] text-[#8fd6d6]">▶ NOW BROADCASTING</span>
-              <span className="mt-1 block font-p4-display text-xl leading-none text-[#f5c518] p4-glow">CH 01</span>
-              <span className="font-p4-tele text-base text-[#cdd2a0]">PROJECTS</span>
+              <span className="mt-1 block font-p4-display text-xl leading-none text-[#f5c518] p4-glow">CH 05</span>
+              <span className="font-p4-tele text-base text-[#cdd2a0]">WEB</span>
             </span>
             <SignalBars className="relative ml-auto h-6" color="#f5c518" />
           </button>
@@ -86,8 +86,8 @@ export function ChannelGuide({ onSelect, onCatchButterfly }: Props) {
           {/* channel grid */}
           <div className="mt-5 flex-1 overflow-y-auto overflow-x-hidden">
             <div className="grid grid-cols-2 gap-x-4 gap-y-7 px-1 pt-5">
-              {CHANNELS.map((c, i) => (
-                <ChannelIcon key={c.id} channel={c} highlight={i === 0} onSelect={onSelect} />
+              {CHANNELS.map((c) => (
+                <ChannelIcon key={c.id} channel={c} highlight={c.id === "web"} onSelect={onSelect} />
               ))}
             </div>
           </div>
